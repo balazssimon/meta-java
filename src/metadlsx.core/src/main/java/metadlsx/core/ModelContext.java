@@ -11,6 +11,22 @@ public class ModelContext {
 		this.model = model;
 	}
 	
+	public static void requireContext() {
+		synchronized (contextStack) {
+			ArrayList<ModelContext> stack = contextStack.get();
+			if (stack.size() == 0) {
+				throw new ModelException("ModelContext is missing. Try running this operation within a ModelContextScope."); 
+			}
+		}		
+	}
+	
+	public static boolean hasContext() {
+		synchronized (contextStack) {
+			ArrayList<ModelContext> stack = contextStack.get();
+			return stack.size() > 0;
+		}		
+	}
+	
 	public static ModelContext current() {
 		synchronized (contextStack) {
 			ArrayList<ModelContext> stack = contextStack.get();

@@ -28,11 +28,8 @@ public abstract class ModelObject {
 	}
 
 	public ModelObject(boolean addToModelContext) {
-		if (addToModelContext) {
-			ModelContext ctx = ModelContext.current();
-			if (ctx != null) {
-				ctx.model().addInstance(this);
-			}
+		if (addToModelContext && ModelContext.hasContext()) {
+			ModelContext.current().model().addInstance(this);
 		}
 		this.metaID = UUID.randomUUID().toString();
 		this.values = new HashMap<>();
