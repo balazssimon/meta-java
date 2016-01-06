@@ -23,6 +23,7 @@ public abstract class ModelObject {
 	private HashMap<ModelProperty, HashMap<ModelProperty, Lazy<Object>>> childInitializers;
 
 	private String metaID;
+	private Model model;
 	private ModelObject parent;
 	private HashSet<ModelObject> children = new HashSet<ModelObject>();
 
@@ -44,7 +45,15 @@ public abstract class ModelObject {
 	public String getMetaID() {
 		return this.metaID;
 	}
+	
+	void mSetModel(Model model) {
+		this.model = model;
+	}
 
+	public Model mModel() {
+		return this.model;
+	}
+	
 	public MetaModel mMetaModel() {
 		return null;
 	}

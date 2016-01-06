@@ -197,6 +197,7 @@ public final class MetaDescriptor {
         }
     
         
+        @metadslx.core.Containment
         public static final ModelProperty ValueProperty =
             metadslx.core.ModelProperty.register("Value", metadslx.core.MetaExpression.class, null, metadslx.core.MetaAnnotationProperty.class, metadslx.core.MetaDescriptor.MetaAnnotationProperty.class, metadslx.core.Lazy.create(() -> metadslx.core.MetaInstance.MetaAnnotationProperty_ValueProperty, true));
         
@@ -514,6 +515,7 @@ public final class MetaDescriptor {
         }
     
         
+        @metadslx.core.Containment
         public static final ModelProperty ValueProperty =
             metadslx.core.ModelProperty.register("Value", metadslx.core.MetaExpression.class, null, metadslx.core.MetaConstant.class, metadslx.core.MetaDescriptor.MetaConstant.class, metadslx.core.Lazy.create(() -> metadslx.core.MetaInstance.MetaConstant_ValueProperty, true));
         
