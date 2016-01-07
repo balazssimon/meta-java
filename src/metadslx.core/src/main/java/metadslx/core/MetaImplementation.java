@@ -78,4 +78,46 @@ public class MetaImplementation extends MetaImplementationBase {
 		}
 		return result;
 	}
+	
+	@Override
+	public List<metadslx.core.MetaProperty> MetaClass_getAllImplementedProperties(metadslx.core.MetaClass _this) {
+		List<MetaProperty> props = _this.getAllProperties();
+		int i = props.size()-1;
+		while (i >= 0) {
+			String name = props.get(i).getName();
+			MetaProperty prop = null;
+			for (MetaProperty p: props) {
+				if (name.equals(p.getName())) {
+					prop = p;
+					break;
+				}
+			}
+			if (prop != props.get(i)) {
+				props.remove(i);
+			}
+			--i;
+		}
+		return props;
+	}
+	
+	@Override
+	public List<metadslx.core.MetaOperation> MetaClass_getAllImplementedOperations(metadslx.core.MetaClass _this) {
+		List<MetaOperation> ops = _this.getAllOperations();
+		int i = ops.size()-1;
+		while (i >= 0) {
+			String name = ops.get(i).getName();
+			MetaOperation op = null;
+			for (MetaOperation o: ops) {
+				if (name.equals(o.getName())) {
+					op = o;
+					break;
+				}
+			}
+			if (op != ops.get(i)) {
+				ops.remove(i);
+			}
+			--i;
+		}
+		return ops;
+	}
 }

@@ -14,6 +14,8 @@ public interface MetaClass extends metadslx.core.MetaType, metadslx.core.MetaDec
     java.util.List<metadslx.core.MetaClass> getAllSuperClasses();
     java.util.List<metadslx.core.MetaProperty> getAllProperties();
     java.util.List<metadslx.core.MetaOperation> getAllOperations();
+    java.util.List<metadslx.core.MetaProperty> getAllImplementedProperties();
+    java.util.List<metadslx.core.MetaOperation> getAllImplementedOperations();
 }
 
 

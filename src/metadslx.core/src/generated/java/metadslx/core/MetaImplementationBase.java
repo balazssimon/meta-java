@@ -158,6 +158,20 @@ abstract class MetaImplementationBase {
     }
 
     /**
+     * Implements the operation: MetaClass.GetAllImplementedProperties()
+     */
+    public java.util.List<metadslx.core.MetaProperty> MetaClass_getAllImplementedProperties(metadslx.core.MetaClass _this) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Implements the operation: MetaClass.GetAllImplementedOperations()
+     */
+    public java.util.List<metadslx.core.MetaOperation> MetaClass_getAllImplementedOperations(metadslx.core.MetaClass _this) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
 	 * Implements the constructor: MetaFunctionType()
 	 * Direct superclasses: metadslx.core.MetaType
 	 * All superclasses: metadslx.core.MetaType

@@ -106,6 +106,14 @@ class MetaClassImpl extends metadslx.core.ModelObject implements metadslx.core.M
     public java.util.List<metadslx.core.MetaOperation> getAllOperations() {
         return metadslx.core.MetaImplementationProvider.implementation().MetaClass_getAllOperations(this);
     }
+    
+    public java.util.List<metadslx.core.MetaProperty> getAllImplementedProperties() {
+        return metadslx.core.MetaImplementationProvider.implementation().MetaClass_getAllImplementedProperties(this);
+    }
+    
+    public java.util.List<metadslx.core.MetaOperation> getAllImplementedOperations() {
+        return metadslx.core.MetaImplementationProvider.implementation().MetaClass_getAllImplementedOperations(this);
+    }
 }
 
 
