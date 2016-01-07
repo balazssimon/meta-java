@@ -263,7 +263,7 @@ public class ModelProperty {
 		if (propertyList.containsKey(property.name)) {
 			throw new ModelException("Property '" + property + "' is already registered as '" + propertyList.get(property.name) + "'.");
 		}
-		HashMap<String, ModelProperty> declaredPropertyList = ModelProperty.properties.get(property.declaringType);
+		HashMap<String, ModelProperty> declaredPropertyList = ModelProperty.declaredProperties.get(property.declaringType);
 		if (declaredPropertyList == null) {
 			declaredPropertyList = new HashMap<String, ModelProperty>();
 			ModelProperty.declaredProperties.put(property.declaringType, declaredPropertyList);

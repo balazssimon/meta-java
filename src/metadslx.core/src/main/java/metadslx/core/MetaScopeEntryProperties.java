@@ -1,6 +1,6 @@
 package metadslx.core;
 
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
+import java.util.List;
 
 public final class MetaScopeEntryProperties {
     public static final ModelProperty SymbolTreeNodesProperty =

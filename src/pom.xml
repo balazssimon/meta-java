@@ -6,6 +6,7 @@
   <packaging>pom</packaging>
   <modules>
   	<module>metadslx.core</module>
+  	<module>metadslx.tempconsole</module>
   </modules>
   <build>
 	<plugins>

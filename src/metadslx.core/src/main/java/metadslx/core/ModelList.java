@@ -241,7 +241,7 @@ public class ModelList<T> extends ModelCollection implements List<T> {
 	@Override
 	public boolean mAdd(Object item, boolean firstCall) {
 		this.mFlushLazyItems();
-		if (firstCall && !this.items.contains(item)) {
+		if (!this.items.contains(item)) {
 			this.items.add((T) item);
 			this.owner.mOnAddValue(this.ownerProperty, item, firstCall);
 			return true;
@@ -252,7 +252,7 @@ public class ModelList<T> extends ModelCollection implements List<T> {
 	@Override
 	public boolean mRemove(Object item, boolean firstCall) {
 		this.mFlushLazyItems();
-		if (firstCall && this.items.remove(item)) {
+		if (this.items.remove(item)) {
 			this.owner.mOnRemoveValue(this.ownerProperty, item, firstCall);
 			return true;
 		}
