@@ -20,6 +20,22 @@ public class TextSpan implements Comparable<TextSpan> {
 		this.endPosition = endPosition;
 	}
 	
+	protected void setStartLine(int startLine) {
+		this.startLine = startLine;
+	}
+
+	protected void setStartPosition(int startPosition) {
+		this.startPosition = startPosition;
+	}
+
+	protected void setEndLine(int endLine) {
+		this.endLine = endLine;
+	}
+
+	protected void setEndPosition(int endPosition) {
+		this.endPosition = endPosition;
+	}
+
 	public int getStartLine() {
 		return startLine;
 	}
