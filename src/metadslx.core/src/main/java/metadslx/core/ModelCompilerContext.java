@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class ModelCompilerContext {
 	static ThreadLocal<ArrayList<ModelCompilerContext>> contextStack = ThreadLocal.withInitial(() -> new ArrayList<ModelCompilerContext>());
+
+    private static DefaultModelCompiler defaultCompiler = new DefaultModelCompiler();
 	
 	private IModelCompiler compiler;
 	
@@ -14,7 +16,7 @@ public class ModelCompilerContext {
 	public static void requireContext() {
 		synchronized (contextStack) {
 			ArrayList<ModelCompilerContext> stack = contextStack.get();
-			if (stack.size() == 0) {
+			if (stack.size() <= 0) {
 				throw new ModelException("ModelCompilerContext is missing. Try running this operation within a ModelCompilerContextScope."); 
 			}
 		}		
@@ -30,10 +32,10 @@ public class ModelCompilerContext {
 	public static IModelCompiler current() {
 		synchronized (contextStack) {
 			ArrayList<ModelCompilerContext> stack = contextStack.get();
-			if (stack.size() == 0) {
-				return null;
-			} else {
+			if (stack.size() > 0) {
 				return stack.get(stack.size()-1).compiler;
+			} else {
+				return ModelCompilerContext.defaultCompiler;
 			}
 		}
 	}

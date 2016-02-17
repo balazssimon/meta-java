@@ -1,9 +1,10 @@
 package metadslx.core;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
-public abstract class ModelCollection {
-	private ArrayList<Lazy<Object>> lazyItems;
+public abstract class ModelCollection<T> implements Collection<T> {
+	private ArrayList<Lazy<? extends T>> lazyItems;
 	
 	protected ModelObject owner;
 	protected ModelProperty ownerProperty;
@@ -20,9 +21,9 @@ public abstract class ModelCollection {
 	
 	public void mFlushLazyItems() {
 		if (this.lazyItems == null) return;
-		ArrayList<Lazy<Object>> lazyCopy = this.lazyItems;
+		ArrayList<Lazy<? extends T>> lazyCopy = this.lazyItems;
 		this.lazyItems = null;
-		for (Lazy<Object> item: lazyCopy) {
+		for (Lazy<? extends T> item: lazyCopy) {
 			if (item.value() != null) {
 				this.mAdd(item.value(), true);
 			}
@@ -33,7 +34,7 @@ public abstract class ModelCollection {
 		this.lazyItems = null;
 	}
 	
-	public boolean mLazyAdd(Lazy<Object> value) {
+	public boolean mLazyAdd(Lazy<? extends T> value) {
 		if (value == null) return false;
 		if (this.lazyItems == null) {
 			this.lazyItems = new ArrayList<>();
@@ -42,19 +43,19 @@ public abstract class ModelCollection {
 		return true;
 	}
 	
-	public boolean mLazyAdd(Iterable<Lazy<Object>> values) {
+	public boolean mLazyAdd(Iterable<Lazy<? extends T>> values) {
 		if (values == null) return false;
 		if (this.lazyItems == null) {
 			this.lazyItems = new ArrayList<>();
 		}
-		for (Lazy<Object> value: values) {
+		for (Lazy<? extends T> value: values) {
 			this.mLazyAdd(value);
 		}
 		return true;
 	}
 	
 	public abstract void clear();
-	public abstract boolean mAdd(Object item, boolean firstCall);
-	public abstract boolean mRemove(Object item, boolean firstCall);
-	
+	public abstract boolean mAdd(T item, boolean firstCall);
+	public abstract boolean mRemove(T item, boolean firstCall);
+
 }

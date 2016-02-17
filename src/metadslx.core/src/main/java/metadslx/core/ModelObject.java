@@ -233,7 +233,27 @@ public abstract class ModelObject {
 		}
 		return null;
 	}
-
+	
+	public Set<ModelProperty> mGetProperties() {
+		HashSet<ModelProperty> result = new HashSet<ModelProperty>();
+		for (ModelProperty prop : ModelProperty.getAllPropertiesForType(this.getClass())) {
+			result.add(prop);
+		}
+		for (ModelProperty prop : this.values.keySet()) {
+			if (!result.stream().anyMatch(p -> p.getName().equals(prop.getName())))
+			{
+				result.add(prop);
+			}
+		}
+		for (ModelProperty prop : this.initializers.keySet()) {
+			if (!result.stream().anyMatch(p -> p.getName().equals(prop.getName())))
+			{
+				result.add(prop);
+			}
+		}
+		return result;
+	}
+	
 	public Set<ModelProperty> mGetAllProperties() {
 		HashSet<ModelProperty> result = new HashSet<ModelProperty>();
 		for (ModelProperty prop : ModelProperty.getAllPropertiesForType(this.getClass())) {
@@ -249,7 +269,12 @@ public abstract class ModelObject {
 	}
 
 	public ModelProperty mFindProperty(String name) {
-		return this.selectSingleProperty(this.mFindProperties(name));
+		for (ModelProperty prop : this.mGetProperties()) {
+			if (prop.getName().equals(name)) {
+				return prop;
+			}
+		}
+		return null;
 	}
 
 	public Set<ModelProperty> mFindProperties(String name) {
@@ -260,15 +285,6 @@ public abstract class ModelObject {
 			}
 		}
 		return result;
-	}
-
-	private ModelProperty selectSingleProperty(Set<ModelProperty> properties) {
-		if (properties.size() == 0)
-			return null;
-		ModelProperty result = properties.iterator().next();
-		if (properties.size() == 1)
-			return result;
-		throw new ModelException("More than one property named '" + result.getName() + "' found in " + this.toString());
 	}
 
 	public void mLazyAdd(ModelProperty property, Lazy<Object> value) {

@@ -5,6 +5,8 @@ public interface IModelCompiler {
 	String getFileName();
 	String getSource();
 	RootScope getGlobalScope();
+	Model getModel();
+	ITriviaProvider getTriviaProvider();
 	INameProvider getNameProvider();
 	ITypeProvider getTypeProvider();
 	IResolutionProvider getResolutionProvider();

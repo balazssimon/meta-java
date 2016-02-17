@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class ModelMultiSet<T> extends ModelCollection implements Collection<T> {
+public class ModelMultiSet<T> extends ModelCollection<T> implements Collection<T> {
 	private ArrayList<T> items;
 
 	public ModelMultiSet(ModelObject owner, ModelProperty ownerProperty) {

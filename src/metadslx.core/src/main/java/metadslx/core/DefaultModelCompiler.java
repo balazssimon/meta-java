@@ -6,6 +6,8 @@ public class DefaultModelCompiler implements IModelCompiler {
 	private String fileName;
 	private String source;
 	private RootScope globalScope;
+	private Model model;
+	private ITriviaProvider triviaProvider;
 	private INameProvider nameProvider;
 	private ITypeProvider typeProvider;
 	private IResolutionProvider resolutionProvider;
@@ -14,8 +16,8 @@ public class DefaultModelCompiler implements IModelCompiler {
 	public DefaultModelCompiler() {
 		this.diagnostics = new ModelCompilerDiagnostics();
 		this.globalScope = new RootScope();
-		// TODO:
-		// this.globalScope.addMetaBuiltInEntries();
+		this.model = new Model();
+		this.triviaProvider = new DefaultTriviaProvider(); 
 		this.nameProvider = new DefaultNameProvider(); 
 		this.typeProvider = new DefaultTypeProvider(); 
 		this.resolutionProvider = new DefaultResolutionProvider(); 
@@ -52,6 +54,22 @@ public class DefaultModelCompiler implements IModelCompiler {
 	
 	protected void setGlobalScope(RootScope globalScope) {
 		this.globalScope = globalScope;
+	}
+	
+	public Model getModel() {
+		return model;
+	}
+	
+	protected void setModel(Model model) {
+		this.model = model;
+	}	
+	
+	public ITriviaProvider getTriviaProvider() {
+		return triviaProvider;
+	}
+	
+	protected void setTriviaProvider(ITriviaProvider triviaProvider) {
+		this.triviaProvider = triviaProvider;
 	}
 	
 	public INameProvider getNameProvider() {

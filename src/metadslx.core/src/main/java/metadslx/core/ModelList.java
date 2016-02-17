@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class ModelList<T> extends ModelCollection implements List<T> {
+public class ModelList<T> extends ModelCollection<T> implements List<T> {
 	private ArrayList<T> items;
 	
 	public ModelList(ModelObject owner, ModelProperty ownerProperty) {

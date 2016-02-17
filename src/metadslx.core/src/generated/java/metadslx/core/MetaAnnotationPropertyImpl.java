@@ -40,6 +40,20 @@ class MetaAnnotationPropertyImpl extends metadslx.core.ModelObject implements me
     public void setName(String value) {
         this.mSet(metadslx.core.MetaDescriptor.MetaNamedElement.NameProperty, value);
     }
+    
+    public String getDocumentation() {
+        Object result = this.mGet(metadslx.core.MetaDescriptor.MetaDocumentedElement.DocumentationProperty); 
+        if (result != null) return (String)result;
+        else return (String)null;
+    }
+    
+    public void setDocumentation(String value) {
+        this.mSet(metadslx.core.MetaDescriptor.MetaDocumentedElement.DocumentationProperty, value);
+    }
+    
+    public java.util.List<String> getDocumentationLines() {
+        return metadslx.core.MetaImplementationProvider.implementation().MetaDocumentedElement_getDocumentationLines(this);
+    }
 }
 
 

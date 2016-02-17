@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class ModelSet<T> extends ModelCollection implements Collection<T> {
+public class ModelSet<T> extends ModelCollection<T> implements Collection<T> {
 	private HashSet<T> items;
 
 	public ModelSet(ModelObject owner, ModelProperty ownerProperty) {

@@ -89,6 +89,16 @@ class MetaClassImpl extends metadslx.core.ModelObject implements metadslx.core.M
         this.mSet(metadslx.core.MetaDescriptor.MetaNamedElement.NameProperty, value);
     }
     
+    public String getDocumentation() {
+        Object result = this.mGet(metadslx.core.MetaDescriptor.MetaDocumentedElement.DocumentationProperty); 
+        if (result != null) return (String)result;
+        else return (String)null;
+    }
+    
+    public void setDocumentation(String value) {
+        this.mSet(metadslx.core.MetaDescriptor.MetaDocumentedElement.DocumentationProperty, value);
+    }
+    
     public java.util.List<metadslx.core.MetaAnnotation> getAnnotations() {
         Object result = this.mGet(metadslx.core.MetaDescriptor.MetaAnnotatedElement.AnnotationsProperty); 
         if (result != null) return (java.util.List<metadslx.core.MetaAnnotation>)result;
@@ -113,6 +123,10 @@ class MetaClassImpl extends metadslx.core.ModelObject implements metadslx.core.M
     
     public java.util.List<metadslx.core.MetaOperation> getAllImplementedOperations() {
         return metadslx.core.MetaImplementationProvider.implementation().MetaClass_getAllImplementedOperations(this);
+    }
+    
+    public java.util.List<String> getDocumentationLines() {
+        return metadslx.core.MetaImplementationProvider.implementation().MetaDocumentedElement_getDocumentationLines(this);
     }
 }
 

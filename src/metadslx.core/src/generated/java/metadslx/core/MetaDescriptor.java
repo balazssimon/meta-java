@@ -3,6 +3,7 @@ package metadslx.core;
 public final class MetaDescriptor {
     static {
         MetaAnnotatedElement.staticInit();
+        MetaDocumentedElement.staticInit();
         MetaNamedElement.staticInit();
         MetaTypedElement.staticInit();
         MetaType.staticInit();
@@ -117,6 +118,23 @@ public final class MetaDescriptor {
         @metadslx.core.Containment
         public static final ModelProperty AnnotationsProperty =
             metadslx.core.ModelProperty.register("Annotations", metadslx.core.ModelList.class, metadslx.core.MetaAnnotation.class, metadslx.core.MetaAnnotatedElement.class, metadslx.core.MetaDescriptor.MetaAnnotatedElement.class, metadslx.core.Lazy.create(() -> metadslx.core.MetaInstance.MetaAnnotatedElement_AnnotationsProperty, true));
+        
+    }
+    
+    public static final class MetaDocumentedElement {
+        static void staticInit() {}
+    
+        static {
+            metadslx.core.MetaDescriptor.staticInit();
+        }
+    
+        public static metadslx.core.MetaClass getMetaClass() {
+            return metadslx.core.MetaInstance.MetaDocumentedElement; 
+        }
+    
+        
+        public static final ModelProperty DocumentationProperty =
+            metadslx.core.ModelProperty.register("Documentation", String.class, null, metadslx.core.MetaDocumentedElement.class, metadslx.core.MetaDescriptor.MetaDocumentedElement.class, metadslx.core.Lazy.create(() -> metadslx.core.MetaInstance.MetaDocumentedElement_DocumentationProperty, true));
         
     }
     

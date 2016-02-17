@@ -1,10 +1,32 @@
 package metadslx.core;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class MetaImplementation extends MetaImplementationBase {
+	@Override
+	public List<String> MetaDocumentedElement_getDocumentationLines(metadslx.core.MetaDocumentedElement _this) {
+		ArrayList<String> result = new ArrayList<>();
+		if (_this.getDocumentation() == null) return result;
+		BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(_this.getDocumentation().getBytes())));
+		while(true) {
+			String line = null;
+			try {
+				line = reader.readLine();
+			} catch (IOException e) {
+				// nop				
+			}
+			if (line == null) break;
+			result.add(line);
+		}
+		return result;
+	}
+	
 	@Override
 	public void MetaFunction(metadslx.core.MetaFunction _this) {
 		super.MetaFunction(_this);

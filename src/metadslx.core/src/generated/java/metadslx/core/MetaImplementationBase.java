@@ -13,9 +13,25 @@ abstract class MetaImplementationBase {
     }
 
     /**
+	 * Implements the constructor: MetaDocumentedElement()
+    */
+    public void MetaDocumentedElement(MetaDocumentedElement _this) {
+    }
+
+    /**
+     * Implements the operation: MetaDocumentedElement.GetDocumentationLines()
+     */
+    public java.util.List<String> MetaDocumentedElement_getDocumentationLines(metadslx.core.MetaDocumentedElement _this) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
 	 * Implements the constructor: MetaNamedElement()
+	 * Direct superclasses: metadslx.core.MetaDocumentedElement
+	 * All superclasses: metadslx.core.MetaDocumentedElement
     */
     public void MetaNamedElement(MetaNamedElement _this) {
+        this.MetaDocumentedElement(_this);
     }
 
     /**
@@ -33,7 +49,7 @@ abstract class MetaImplementationBase {
     /**
 	 * Implements the constructor: MetaAnnotation()
 	 * Direct superclasses: metadslx.core.MetaNamedElement
-	 * All superclasses: metadslx.core.MetaNamedElement
+	 * All superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaDocumentedElement
     */
     public void MetaAnnotation(MetaAnnotation _this) {
         this.MetaNamedElement(_this);
@@ -42,7 +58,7 @@ abstract class MetaImplementationBase {
     /**
 	 * Implements the constructor: MetaAnnotationProperty()
 	 * Direct superclasses: metadslx.core.MetaNamedElement
-	 * All superclasses: metadslx.core.MetaNamedElement
+	 * All superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaDocumentedElement
     */
     public void MetaAnnotationProperty(MetaAnnotationProperty _this) {
         this.MetaNamedElement(_this);
@@ -51,7 +67,7 @@ abstract class MetaImplementationBase {
     /**
 	 * Implements the constructor: MetaNamespace()
 	 * Direct superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaAnnotatedElement
-	 * All superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaAnnotatedElement
+	 * All superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaDocumentedElement, metadslx.core.MetaAnnotatedElement
     */
     public void MetaNamespace(MetaNamespace _this) {
         this.MetaNamedElement(_this);
@@ -61,7 +77,7 @@ abstract class MetaImplementationBase {
     /**
 	 * Implements the constructor: MetaDeclaration()
 	 * Direct superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaAnnotatedElement
-	 * All superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaAnnotatedElement
+	 * All superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaDocumentedElement, metadslx.core.MetaAnnotatedElement
     */
     public void MetaDeclaration(MetaDeclaration _this) {
         this.MetaNamedElement(_this);
@@ -71,7 +87,7 @@ abstract class MetaImplementationBase {
     /**
 	 * Implements the constructor: MetaModel()
 	 * Direct superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaAnnotatedElement
-	 * All superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaAnnotatedElement
+	 * All superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaDocumentedElement, metadslx.core.MetaAnnotatedElement
     */
     public void MetaModel(MetaModel _this) {
         this.MetaNamedElement(_this);
@@ -99,7 +115,7 @@ abstract class MetaImplementationBase {
     /**
 	 * Implements the constructor: MetaPrimitiveType()
 	 * Direct superclasses: metadslx.core.MetaType, metadslx.core.MetaNamedElement
-	 * All superclasses: metadslx.core.MetaType, metadslx.core.MetaNamedElement
+	 * All superclasses: metadslx.core.MetaType, metadslx.core.MetaNamedElement, metadslx.core.MetaDocumentedElement
     */
     public void MetaPrimitiveType(MetaPrimitiveType _this) {
         this.MetaType(_this);
@@ -109,7 +125,7 @@ abstract class MetaImplementationBase {
     /**
 	 * Implements the constructor: MetaEnum()
 	 * Direct superclasses: metadslx.core.MetaType, metadslx.core.MetaDeclaration
-	 * All superclasses: metadslx.core.MetaType, metadslx.core.MetaDeclaration, metadslx.core.MetaNamedElement, metadslx.core.MetaAnnotatedElement
+	 * All superclasses: metadslx.core.MetaType, metadslx.core.MetaDeclaration, metadslx.core.MetaNamedElement, metadslx.core.MetaDocumentedElement, metadslx.core.MetaAnnotatedElement
     */
     public void MetaEnum(MetaEnum _this) {
         this.MetaType(_this);
@@ -119,7 +135,7 @@ abstract class MetaImplementationBase {
     /**
 	 * Implements the constructor: MetaEnumLiteral()
 	 * Direct superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaTypedElement
-	 * All superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaTypedElement
+	 * All superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaDocumentedElement, metadslx.core.MetaTypedElement
     */
     public void MetaEnumLiteral(MetaEnumLiteral _this) {
         this.MetaNamedElement(_this);
@@ -129,7 +145,7 @@ abstract class MetaImplementationBase {
     /**
 	 * Implements the constructor: MetaClass()
 	 * Direct superclasses: metadslx.core.MetaType, metadslx.core.MetaDeclaration
-	 * All superclasses: metadslx.core.MetaType, metadslx.core.MetaDeclaration, metadslx.core.MetaNamedElement, metadslx.core.MetaAnnotatedElement
+	 * All superclasses: metadslx.core.MetaType, metadslx.core.MetaDeclaration, metadslx.core.MetaNamedElement, metadslx.core.MetaDocumentedElement, metadslx.core.MetaAnnotatedElement
     */
     public void MetaClass(MetaClass _this) {
         this.MetaType(_this);
@@ -183,7 +199,7 @@ abstract class MetaImplementationBase {
     /**
 	 * Implements the constructor: MetaFunction()
 	 * Direct superclasses: metadslx.core.MetaTypedElement, metadslx.core.MetaNamedElement, metadslx.core.MetaAnnotatedElement
-	 * All superclasses: metadslx.core.MetaTypedElement, metadslx.core.MetaNamedElement, metadslx.core.MetaAnnotatedElement
+	 * All superclasses: metadslx.core.MetaTypedElement, metadslx.core.MetaNamedElement, metadslx.core.MetaDocumentedElement, metadslx.core.MetaAnnotatedElement
      * Initializes the following readonly properties:
      *    MetaFunction.Type
     */
@@ -196,7 +212,7 @@ abstract class MetaImplementationBase {
     /**
 	 * Implements the constructor: MetaGlobalFunction()
 	 * Direct superclasses: metadslx.core.MetaFunction, metadslx.core.MetaDeclaration
-	 * All superclasses: metadslx.core.MetaFunction, metadslx.core.MetaTypedElement, metadslx.core.MetaNamedElement, metadslx.core.MetaAnnotatedElement, metadslx.core.MetaDeclaration
+	 * All superclasses: metadslx.core.MetaFunction, metadslx.core.MetaTypedElement, metadslx.core.MetaNamedElement, metadslx.core.MetaDocumentedElement, metadslx.core.MetaAnnotatedElement, metadslx.core.MetaDeclaration
      * Initializes the following readonly properties:
      *    MetaFunction.Type
     */
@@ -208,7 +224,7 @@ abstract class MetaImplementationBase {
     /**
 	 * Implements the constructor: MetaOperation()
 	 * Direct superclasses: metadslx.core.MetaFunction
-	 * All superclasses: metadslx.core.MetaFunction, metadslx.core.MetaTypedElement, metadslx.core.MetaNamedElement, metadslx.core.MetaAnnotatedElement
+	 * All superclasses: metadslx.core.MetaFunction, metadslx.core.MetaTypedElement, metadslx.core.MetaNamedElement, metadslx.core.MetaDocumentedElement, metadslx.core.MetaAnnotatedElement
      * Initializes the following readonly properties:
      *    MetaFunction.Type
     */
@@ -219,7 +235,7 @@ abstract class MetaImplementationBase {
     /**
 	 * Implements the constructor: MetaConstant()
 	 * Direct superclasses: metadslx.core.MetaTypedElement, metadslx.core.MetaDeclaration
-	 * All superclasses: metadslx.core.MetaTypedElement, metadslx.core.MetaDeclaration, metadslx.core.MetaNamedElement, metadslx.core.MetaAnnotatedElement
+	 * All superclasses: metadslx.core.MetaTypedElement, metadslx.core.MetaDeclaration, metadslx.core.MetaNamedElement, metadslx.core.MetaDocumentedElement, metadslx.core.MetaAnnotatedElement
     */
     public void MetaConstant(MetaConstant _this) {
         this.MetaTypedElement(_this);
@@ -229,7 +245,7 @@ abstract class MetaImplementationBase {
     /**
 	 * Implements the constructor: MetaConstructor()
 	 * Direct superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaAnnotatedElement
-	 * All superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaAnnotatedElement
+	 * All superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaDocumentedElement, metadslx.core.MetaAnnotatedElement
     */
     public void MetaConstructor(MetaConstructor _this) {
         this.MetaNamedElement(_this);
@@ -239,7 +255,7 @@ abstract class MetaImplementationBase {
     /**
 	 * Implements the constructor: MetaParameter()
 	 * Direct superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaTypedElement, metadslx.core.MetaAnnotatedElement
-	 * All superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaTypedElement, metadslx.core.MetaAnnotatedElement
+	 * All superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaDocumentedElement, metadslx.core.MetaTypedElement, metadslx.core.MetaAnnotatedElement
     */
     public void MetaParameter(MetaParameter _this) {
         this.MetaNamedElement(_this);
@@ -250,7 +266,7 @@ abstract class MetaImplementationBase {
     /**
 	 * Implements the constructor: MetaProperty()
 	 * Direct superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaTypedElement, metadslx.core.MetaAnnotatedElement
-	 * All superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaTypedElement, metadslx.core.MetaAnnotatedElement
+	 * All superclasses: metadslx.core.MetaNamedElement, metadslx.core.MetaDocumentedElement, metadslx.core.MetaTypedElement, metadslx.core.MetaAnnotatedElement
     */
     public void MetaProperty(MetaProperty _this) {
         this.MetaNamedElement(_this);

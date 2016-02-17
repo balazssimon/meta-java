@@ -241,13 +241,25 @@ public class ModelProperty {
 			propertyCache = new PropertyCache();
 			ModelProperty.cachedProperties.put(type, propertyCache);
 			HashSet<ModelProperty> allProperties = new HashSet<ModelProperty>();
+			HashSet<ModelProperty> distinctProperties = new HashSet<ModelProperty>();
 			HashMap<String, ModelProperty> propertyList = ModelProperty.properties.get(type);
 			if (propertyList != null) {
-				propertyCache.getProperties().addAll(propertyList.values());
+				propertyCache.getDeclaredProperties().addAll(propertyList.values());
 				allProperties.addAll(propertyList.values());
+				for (ModelProperty prop : propertyList.values()) {
+					if (!propertyCache.getProperties().stream().anyMatch(p -> p.getName().equals(prop.getName()))) {
+						propertyCache.getProperties().add(prop);
+					}
+				}
 			} 
 			for (Class intf: type.getInterfaces()) {
-				allProperties.addAll(ModelProperty.getCachedProperties(intf).getAllProperties());
+				ArrayList<ModelProperty> superProperties = ModelProperty.getCachedProperties(intf).getAllProperties();
+				allProperties.addAll(superProperties);
+				for (ModelProperty prop : superProperties) {
+					if (!propertyCache.getProperties().stream().anyMatch(p -> p.getName().equals(prop.getName()))) {
+						propertyCache.getProperties().add(prop);
+					}
+				}
 			}
 			propertyCache.getAllProperties().addAll(allProperties);
 		}
@@ -281,6 +293,10 @@ public class ModelProperty {
 		return ModelProperty.getCachedProperties(owningType).getProperties();
 	}
 	
+	public static Iterable<ModelProperty> getDeclaredPropertiesForType(Class owningType) {
+		return ModelProperty.getCachedProperties(owningType).getDeclaredProperties();
+	}
+	
 	public static Iterable<ModelProperty> getAllPropertiesForType(Class owningType) {
 		return ModelProperty.getCachedProperties(owningType).getAllProperties();
 	}
@@ -301,14 +317,19 @@ public class ModelProperty {
 	private static class PropertyCache {
 		public PropertyCache() {
 			this.properties = new ArrayList<ModelProperty>();
+			this.declaredProperties = new ArrayList<ModelProperty>();
 			this.allProperties = new ArrayList<ModelProperty>();
 		}
 		
 	    private ArrayList<ModelProperty> properties;
+	    private ArrayList<ModelProperty> declaredProperties;
 	    private ArrayList<ModelProperty> allProperties;
 
 	    public ArrayList<ModelProperty> getProperties() {
 			return properties;
+		}
+	    public ArrayList<ModelProperty> getDeclaredProperties() {
+			return declaredProperties;
 		}
 		public ArrayList<ModelProperty> getAllProperties() {
 			return allProperties;
