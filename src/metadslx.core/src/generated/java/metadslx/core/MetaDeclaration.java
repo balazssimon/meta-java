@@ -1,6 +1,5 @@
 package metadslx.core;
 
-
 public interface MetaDeclaration extends metadslx.core.MetaNamedElement, metadslx.core.MetaAnnotatedElement
 {
     metadslx.core.MetaNamespace getNamespace();

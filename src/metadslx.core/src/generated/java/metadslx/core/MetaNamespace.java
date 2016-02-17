@@ -1,6 +1,6 @@
 package metadslx.core;
 
-@Scope
+@metadslx.core.Scope
 public interface MetaNamespace extends metadslx.core.MetaNamedElement, metadslx.core.MetaAnnotatedElement
 {
     metadslx.core.MetaNamespace getParent();

@@ -1,6 +1,5 @@
 package metadslx.core;
 
-
 public interface MetaProperty extends metadslx.core.MetaNamedElement, metadslx.core.MetaTypedElement, metadslx.core.MetaAnnotatedElement
 {
     metadslx.core.MetaPropertyKind getKind();

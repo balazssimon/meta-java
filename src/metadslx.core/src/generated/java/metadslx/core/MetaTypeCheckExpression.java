@@ -1,6 +1,5 @@
 package metadslx.core;
 
-
 public interface MetaTypeCheckExpression extends metadslx.core.MetaExpression
 {
     metadslx.core.MetaType getTypeReference();

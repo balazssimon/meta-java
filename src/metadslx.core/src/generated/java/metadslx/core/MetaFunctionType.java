@@ -1,6 +1,5 @@
 package metadslx.core;
 
-
 public interface MetaFunctionType extends metadslx.core.MetaType
 {
     java.util.List<metadslx.core.MetaType> getParameterTypes();

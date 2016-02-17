@@ -1,6 +1,6 @@
 package metadslx.core;
 
-@Type
+@metadslx.core.Type
 public interface MetaType
 {
 

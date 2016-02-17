@@ -1,6 +1,5 @@
 package metadslx.core;
 
-
 public interface MetaUnaryExpression extends metadslx.core.MetaOperatorExpression
 {
     metadslx.core.MetaExpression getExpression();

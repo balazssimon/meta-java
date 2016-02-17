@@ -1,6 +1,5 @@
 package metadslx.core;
 
-
 public interface MetaTypedElement
 {
     metadslx.core.MetaType getType();

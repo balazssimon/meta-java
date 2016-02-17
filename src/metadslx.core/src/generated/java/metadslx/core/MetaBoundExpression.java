@@ -1,6 +1,5 @@
 package metadslx.core;
 
-
 public interface MetaBoundExpression extends metadslx.core.MetaExpression
 {
     boolean getUniqueDefinition();

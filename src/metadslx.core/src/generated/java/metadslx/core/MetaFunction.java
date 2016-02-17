@@ -1,6 +1,5 @@
 package metadslx.core;
 
-
 public interface MetaFunction extends metadslx.core.MetaTypedElement, metadslx.core.MetaNamedElement, metadslx.core.MetaAnnotatedElement
 {
     metadslx.core.MetaFunctionType getType();

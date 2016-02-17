@@ -1,8 +1,6 @@
 package metadslx.core;
 
-
 public enum MetaPropertyKind {
-
     Normal,
     Readonly,
     Lazy,

@@ -1,6 +1,5 @@
 package metadslx.core;
 
-
 public interface MetaInheritedPropertyInitializer extends metadslx.core.MetaPropertyInitializer
 {
     String getObjectName();

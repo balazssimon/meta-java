@@ -1,6 +1,5 @@
 package metadslx.core;
 
-
 public interface MetaBinaryExpression extends metadslx.core.MetaOperatorExpression
 {
     metadslx.core.MetaExpression getLeft();

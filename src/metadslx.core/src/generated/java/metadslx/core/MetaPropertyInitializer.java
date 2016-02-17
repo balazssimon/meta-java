@@ -1,6 +1,5 @@
 package metadslx.core;
 
-
 public interface MetaPropertyInitializer
 {
     metadslx.core.MetaConstructor getConstructor();

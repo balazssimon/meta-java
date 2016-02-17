@@ -1,6 +1,5 @@
 package metadslx.core;
 
-
 public interface MetaNewCollectionExpression extends metadslx.core.MetaExpression
 {
     metadslx.core.MetaCollectionType getTypeReference();

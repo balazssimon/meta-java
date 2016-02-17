@@ -1,6 +1,5 @@
 package metadslx.core;
 
-
 public interface MetaNewPropertyInitializer
 {
     metadslx.core.MetaNewExpression getParent();

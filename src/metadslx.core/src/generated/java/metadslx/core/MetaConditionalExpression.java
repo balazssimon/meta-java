@@ -1,6 +1,5 @@
 package metadslx.core;
 
-
 public interface MetaConditionalExpression extends metadslx.core.MetaExpression
 {
     metadslx.core.MetaExpression getCondition();

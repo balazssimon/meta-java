@@ -1,6 +1,6 @@
 package metadslx.core;
 
-@Scope
+@metadslx.core.Scope
 public interface MetaClass extends metadslx.core.MetaType, metadslx.core.MetaDeclaration
 {
     boolean getIsAbstract();

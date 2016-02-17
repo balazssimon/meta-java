@@ -1,6 +1,5 @@
 package metadslx.core;
 
-
 public interface MetaModel extends metadslx.core.MetaNamedElement, metadslx.core.MetaAnnotatedElement
 {
     String getUri();
