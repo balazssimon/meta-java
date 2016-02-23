@@ -25,7 +25,7 @@ class SwitchInfo {
 	public void setIdentifierName(String identifierName) {
 		this.identifierName = identifierName;
 	}
-	public boolean isAllowTypeAs() {
+	public boolean getAllowTypeAs() {
 		return allowTypeAs;
 	}
 	public void setAllowTypeAs(boolean allowTypeAs) {

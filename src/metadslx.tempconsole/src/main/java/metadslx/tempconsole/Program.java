@@ -1,18 +1,23 @@
 package metadslx.tempconsole;
 
-import metadslx.core.MetaClass;
-import metadslx.core.MetaFactory;
-import metadslx.core.MetaProperty;
-import metadslx.core.Model;
-import metadslx.core.ModelContextScope;
-import metadslx.core.ModelObject;
-import metadslx.core.ModelProperty;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.channels.ScatteringByteChannel;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+
+import metadslx.compiler.MetaGeneratorCompiler;
+import metadslx.compiler.MetaGeneratorGenerator;
+import metadslx.core.DiagnosticMessage;
 
 public class Program {
 
 	public static void main(String[] args) {
 		try {
-			Model model = new Model();
+			/*Model model = new Model();
 			try (ModelContextScope scope = new ModelContextScope(model)) {
 				MetaFactory factory = MetaFactory.instance();
 				MetaClass cls = factory.createMetaClass();
@@ -27,10 +32,90 @@ public class Program {
 				ModelProperty nameProp = mo.mFindProperty("Name");
 				Object value = mo.mGet(nameProp);
 				System.out.println(mo+": "+value);
+			}*/
+			compileGenerator("src/main/java/metadslx/tempconsole/GenTest.mgen", "src/main/java/metadslx/tempconsole/GenTest.java");
+			ArrayList<String> sl = new ArrayList<>();
+			sl.add("AAA");
+			sl.add("BBB");
+			sl.add("CCC");
+			ArrayList<Person> pl = new ArrayList<>();
+			pl.add(new Person("XXX", 25));
+			pl.add(new Person("YYY", 40));
+			pl.add(new Student("TTT", "PQR123", 35));
+			pl.add(new Person("YYY", 40));
+			pl.add(new Student("UUU", "RST456", 50));
+			GenTest gt = new GenTest(pl);
+			System.out.println(gt.generate());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	private static void compileGenerator(String fileName, String outputFileName) {
+		try {		
+			String source = readFile(fileName, StandardCharsets.UTF_8);
+			MetaGeneratorCompiler mgc = new MetaGeneratorCompiler(source, fileName);
+			mgc.compile();
+			if (!mgc.getDiagnostics().hasErrors()) {
+				MetaGeneratorGenerator mgg = new MetaGeneratorGenerator(mgc.getParseTree());
+				String generated = mgg.getGeneratedSource();
+				try(PrintWriter writer = new PrintWriter(outputFileName)) {
+					writer.println(generated);
+				}
+			} else {
+				for (DiagnosticMessage msg: mgc.getDiagnostics().getMessages()) {
+					System.out.println(msg);
+				}
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 
+	static String readFile(String path, Charset encoding) throws IOException 
+	{
+	  byte[] encoded = Files.readAllBytes(Paths.get(path));
+	  return new String(encoded, encoding);
+	}
+	
+	public static class Person {
+		private String name;
+		private int age;
+		
+		public Person(String name, int age) {
+			this.name = name;
+			this.age = age;
+		}
+		
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public int getAge() {
+			return age;
+		}
+		public void setAge(int age) {
+			this.age = age;
+		}
+	}
+	
+	public static class Student extends Person {
+		private String neptun;
+		
+		public Student(String name, String neptun, int age) {
+			super(name, age);
+			this.neptun = neptun;
+		}
+
+		public String getNeptun() {
+			return neptun;
+		}
+		public void setNeptun(String neptun) {
+			this.neptun = neptun;
+		}
+	}
+	
+	
 }

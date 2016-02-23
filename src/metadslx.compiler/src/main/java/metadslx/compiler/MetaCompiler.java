@@ -64,19 +64,19 @@ public abstract class MetaCompiler implements IModelCompiler, IAntlr4Compiler {
     }
     
     
-    public void Compile() {
+    public void compile() {
         try (ModelContextScope mcs = new ModelContextScope(this.getModel()))
         {
 	        try (ModelCompilerContextScope mccs = new ModelCompilerContextScope(this))
 	        {
-	            this.DoCompile();
+	            this.doCompile();
 	        } catch (Exception e) {
 				throw new MetaCompilerException(e);
 			}
         }
     }
     
-    protected abstract void DoCompile();
+    protected abstract void doCompile();
     
     
 	public ModelCompilerDiagnostics getDiagnostics() {

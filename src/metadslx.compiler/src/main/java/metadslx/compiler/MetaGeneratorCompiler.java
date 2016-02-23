@@ -4,6 +4,8 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import metadslx.compiler.MetaGeneratorParser.MainContext;
+
 public class MetaGeneratorCompiler extends MetaCompiler {
 
 	public MetaGeneratorCompiler(String source, String fileName) {
@@ -12,10 +14,10 @@ public class MetaGeneratorCompiler extends MetaCompiler {
 
 	private MetaGeneratorLexer lexer;
 	private MetaGeneratorParser parser;
-	private ParseTree parseTree;
+	private MainContext parseTree;
 	
 	@Override
-	protected void DoCompile() {
+	protected void doCompile() {
         ANTLRInputStream inputStream = new ANTLRInputStream(this.getSource());
         this.lexer = new MetaGeneratorLexer(inputStream);
         this.lexer.addErrorListener(this);
@@ -33,7 +35,7 @@ public class MetaGeneratorCompiler extends MetaCompiler {
 		return parser;
 	}
 
-	public ParseTree getParseTree() {
+	public MainContext getParseTree() {
 		return parseTree;
 	}
 

@@ -14,12 +14,21 @@
   			<artifactId>metadslx.core</artifactId>
   			<version>0.0.1-SNAPSHOT</version>
   		</dependency>
+  		<dependency>
+  			<groupId>metadslx</groupId>
+  			<artifactId>metadslx.compiler</artifactId>
+  			<version>0.0.1-SNAPSHOT</version>
+  		</dependency>
   	</dependencies>
   </dependencyManagement>
   <dependencies>
   	<dependency>
   		<groupId>metadslx</groupId>
   		<artifactId>metadslx.core</artifactId>
+  	</dependency>
+  	<dependency>
+  		<groupId>metadslx</groupId>
+  		<artifactId>metadslx.compiler</artifactId>
   	</dependency>
   </dependencies>
 </project>

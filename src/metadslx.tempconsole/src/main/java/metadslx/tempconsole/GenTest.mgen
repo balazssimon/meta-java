@@ -1,0 +1,38 @@
+namespace metadslx.tempconsole;
+
+generator GenTest for ArrayList<Program.Person>;
+
+properties Properties
+	int LineCount = 0;
+	int FunctionCount = 0;
+end properties
+
+template generate()
+Hello [echo("World")]!
+[if (hasloop(Instances->s:typeof(Program.Student) where s.Age > 40))]
+HASLOOP
+[end if]
+[loop(s:Instances)]
+	[write(s)]
+	[write40(s)]
+[end loop]
+end template
+
+function String echo(String text)
+	return text;
+end function
+
+template write(Program.Person p)
+[switch(p)]
+[type as Program.Student:][p.Name] ([p.Neptun]): [p.Age]
+[type as Program.Person:][p.Name]: [p.Age]
+[end switch]
+end template
+
+
+template write40(Program.Person p)
+[switch(p.Age)]
+[case 40:] HELLO [p.Age]!!!
+[default:] NON-40: [p.Age]
+[end switch]
+end template
