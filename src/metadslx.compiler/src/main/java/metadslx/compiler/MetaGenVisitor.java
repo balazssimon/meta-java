@@ -66,6 +66,11 @@ class MetaGenVisitor extends MetaGeneratorParserBaseVisitor<Object> {
 		sb.append("\n");
 	}
 
+	protected void writeLine() {
+		this.writeIndent();
+		this.appendLine();
+	}
+	
 	protected void writeLine(String text) {
 		this.writeIndent();
 		this.write(text);
@@ -76,6 +81,16 @@ class MetaGenVisitor extends MetaGeneratorParserBaseVisitor<Object> {
 		this.writeIndent();
 		this.write(MessageFormat.format(format, args));
 		this.appendLine();
+	}
+	
+	protected String toCamelCase(String name) {
+		if (name == null || name.length() < 1) return name;
+		return name.substring(0, 1).toLowerCase()+name.substring(1);
+	}
+	
+	protected String toPascalCase(String name) {
+		if (name == null || name.length() < 1) return name;
+		return name.substring(0, 1).toUpperCase()+name.substring(1);
 	}
 	
 	public void close() {
