@@ -121,18 +121,18 @@ class AnnotatedAntlr4PropertyBlockExpressionPrinter extends AnnotatedAntlr4Prope
                     if (propSels.get(0).selector != null)
                     {
                         String selName = propSels.get(0).selector.getText();
-                        output.writeLine("for (int curr = 0; curr < ctx.{0}.Length; ++curr)", elem.getAccessorName());
+                        output.writeLine("for (int curr = 0; curr < ctx.{0}.size(); ++curr)", elem.getAccessorName());
                         output.writeLine("{");
                         output.incIndent();
                         output.writeLine("int first = 0;");
-                        output.writeLine("int last = ctx.{0}.Length - 1;", elem.getAccessorName());
+                        output.writeLine("int last = ctx.{0}.size() - 1;", elem.getAccessorName());
                         output.writeLine("int prev = curr - 1;");
                         output.writeLine("int next = curr + 1;");
                         output.writeLine("if ({0} >= first && {0} <= last)", selName);
                         output.writeLine("{");
                         output.incIndent();
                         output.writeIndent();
-                        output.write("this.SetValue(ctx.{0}[{2}], \"{1}\", new Lazy<object>(() => ", elem.getAccessorName(), propName, selName);
+                        output.write("this.setValue(ctx.{0}.get({2}), \"{1}\", new Lazy<Object>(() -> ", elem.getAccessorName(), propName, selName);
                         closeScopes = 2;
                     }
                     else if (propSels.get(1).selector != null)
@@ -147,7 +147,7 @@ class AnnotatedAntlr4PropertyBlockExpressionPrinter extends AnnotatedAntlr4Prope
                 else
                 {
                     output.writeIndent();
-                    output.write("this.SetValue(ctx.{0}, \"{1}\", new Lazy<object>(() => ", elem.getAccessorName(), propName);
+                    output.write("this.setValue(ctx.{0}, \"{1}\", new Lazy<Object>(() -> ", elem.getAccessorName(), propName);
                 }
                 started = true;
                 closeFunction = true;
@@ -161,7 +161,7 @@ class AnnotatedAntlr4PropertyBlockExpressionPrinter extends AnnotatedAntlr4Prope
                 else
                 {
                     output.writeIndent();
-                    output.write("this.SetValue(ctx, \"{0}\", new Lazy<object>(() => ", propName);
+                    output.write("this.setValue(ctx, \"{0}\", new Lazy<Object>(() => ", propName);
                 }
                 started = true;
                 closeFunction = true;
@@ -186,12 +186,12 @@ class AnnotatedAntlr4PropertyBlockExpressionPrinter extends AnnotatedAntlr4Prope
                 {
                     String selName = propSels.get(0).selector.getText();
                     output.writeIndent();
-                    output.write("this.SetValue(ctx, \"{0}\", {1}, new Lazy<object>(() => ", propName, selName);
+                    output.write("this.setValue(ctx, \"{0}\", {1}, new Lazy<Object>(() => ", propName, selName);
                 }
                 else
                 {
                     output.writeIndent();
-                    output.write("this.SetValue(ctx, \"{0}\", new Lazy<object>(() => ", propName);
+                    output.write("this.setValue(ctx, \"{0}\", new Lazy<Object>(() => ", propName);
                 }
             }
             started = true;
@@ -294,19 +294,19 @@ class AnnotatedAntlr4PropertyBlockExpressionPrinter extends AnnotatedAntlr4Prope
             for (int i = minI; i < propSels.size(); ++i)
             {
                 String propName = propSels.get(i).name.getText();
-                output.write("this.GetValue(");
+                output.write("this.getValue(");
             }
             if (minI >= propSels.size())
             {
                 // TODO
-                output.write("this.Symbol(");
+                output.write("this.symbol(");
             }
             if (elem != null)
             {
                 if (propSels.get(0).selector != null)
                 {
                     String selName = propSels.get(0).selector.getText();
-                    output.write("ctx.{0}[{1}]", elem.getAccessorName(), selName);
+                    output.write("ctx.{0}.get({1})", elem.getAccessorName(), selName);
                 }
                 else
                 {

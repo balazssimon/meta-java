@@ -2,6 +2,7 @@ package metadslx.compiler;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
 
@@ -628,7 +629,7 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
                         }
                         else
                         {
-                            value = MessageFormat.format("typeof({0})", toContextType(value));
+                            value = MessageFormat.format("{0}.class", toContextType(value));
                         }
                     }
                 }
@@ -674,7 +675,7 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
                                 }
                                 else
                                 {
-                                    value = MessageFormat.format("typeof({0})", toContextType(pre.getType()));
+                                    value = MessageFormat.format("{0}.class", toContextType(pre.getType()));
                                 }
                             }
                         }
@@ -697,6 +698,7 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
             appendLine();
         }
         writeLine("import java.util.ArrayList;");
+        writeLine("import java.util.HashMap;");
         appendLine();
         if (this.compiler.isParser() && this.parserHeader != null && !"".equals(this.parserHeader.trim()))
         {
@@ -757,7 +759,7 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
 
         if (this.compiler.isParser())
         {
-            writeLine("public class {0}Annotator : {0}BaseVisitor<object>", this.parserName);
+            writeLine("public class {0}Annotator : {0}BaseVisitor<Object>", this.parserName);
         }
         else
         {
@@ -769,42 +771,42 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
         {
             writeLine("private {0}Annotator lexerAnnotator = new {0}Annotator();", this.lexerName);
         }
-        writeLine("private List<object> grammarAnnotations = new List<object>();");
+        writeLine("private ArrayList<Object> grammarAnnotations = new ArrayList<>();");
         if (this.compiler.isLexer())
         {
-            writeLine("private Dictionary<int, List<object>> tokenAnnotations = new Dictionary<int, List<object>>();");
-            writeLine("private Dictionary<int, List<object>> modeAnnotations = new Dictionary<int, List<object>>();");
+            writeLine("private HashMap<Integer, ArrayList<Object>> tokenAnnotations = new HashMap<>();");
+            writeLine("private HashMap<Integer, ArrayList<Object>> modeAnnotations = new HashMap<>();");
         }
         if (this.compiler.isParser())
         {
-            writeLine("private Dictionary<Type, List<object>> ruleAnnotations = new Dictionary<Type, List<object>>();");
-            writeLine("private Dictionary<object, List<object>> treeAnnotations = new Dictionary<object, List<object>>();");
+            writeLine("private HashMap<Class, ArrayList<Object>> ruleAnnotations = new HashMap<>();");
+            writeLine("private HashMap<Object, ArrayList<Object>> treeAnnotations = new HashMap<>();");
         }
 
         writeLine();
         if (this.compiler.isParser())
         {
-            writeLine("public List<object> ParserAnnotations { get { return this.grammarAnnotations; } }");
+            writeLine("public ArrayList<Object> getParserAnnotations() { return this.grammarAnnotations; }");
             if (this.compiler.isLexer())
             {
-                writeLine("public List<object> LexerAnnotations { get { return this.grammarAnnotations; } }");
-                writeLine("public Dictionary<int, List<object>> TokenAnnotations { get { return this.tokenAnnotations; } }");
-                writeLine("public Dictionary<int, List<object>> ModeAnnotations { get { return this.modeAnnotations; } }");
+                writeLine("public ArrayList<Object> getLexerAnnotations() { return this.grammarAnnotations; }");
+                writeLine("public HashMap<Integer, ArrayList<Object>> getTokenAnnotations() { return this.tokenAnnotations; }");
+                writeLine("public HashMap<Integer, ArrayList<Object>> getModeAnnotations() { return this.modeAnnotations; }");
             }
             else
             {
-                writeLine("public List<object> LexerAnnotations { get { return this.lexerAnnotator.LexerAnnotations; } }");
-                writeLine("public Dictionary<int, List<object>> TokenAnnotations { get { return this.lexerAnnotator.TokenAnnotations; } }");
-                writeLine("public Dictionary<int, List<object>> ModeAnnotations { get { return this.lexerAnnotator.ModeAnnotations; } }");
+                writeLine("public ArrayList<Object> getLexerAnnotations() { return this.lexerAnnotator.LexerAnnotations; }");
+                writeLine("public HashMap<Integer, ArrayList<Object>> getTokenAnnotations() { return this.lexerAnnotator.TokenAnnotations; }");
+                writeLine("public HashMap<Integer, ArrayList<Object>> getModeAnnotations() { return this.lexerAnnotator.ModeAnnotations; }");
             }
-            writeLine("public Dictionary<Type, List<object>> RuleAnnotations { get { return this.ruleAnnotations; } }");
-            writeLine("public Dictionary<object, List<object>> TreeAnnotations { get { return this.treeAnnotations; } }");
+            writeLine("public HashMap<Class, ArrayList<Object>> getRuleAnnotations() { return this.ruleAnnotations; }");
+            writeLine("public HashMap<Object, ArrayList<Object>> getTreeAnnotations() { return this.treeAnnotations; }");
         }
         else
         {
-            writeLine("public List<object> LexerAnnotations { get { return this.grammarAnnotations; } }");
-            writeLine("public Dictionary<int, List<object>> TokenAnnotations { get { return this.tokenAnnotations; } }");
-            writeLine("public Dictionary<int, List<object>> ModeAnnotations { get { return this.modeAnnotations; } }");
+            writeLine("public ArrayList<Object> getLexerAnnotations() { get { return this.grammarAnnotations; }");
+            writeLine("public HashMap<Integer, ArrayList<Object>> getTokenAnnotations() { return this.tokenAnnotations; }");
+            writeLine("public HashMap<Integer, ArrayList<Object>> getModeAnnotations() { return this.modeAnnotations; }");
         }
         
         writeLine();
@@ -859,12 +861,12 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
         }
         writeLine("{");
         incIndent();
-        writeLine("List<object> annotList = null;");
+        writeLine("ArrayList<Object> annotList = null;");
         for (Annotation annot: currentGrammar.getAnnotations())
         {
             String tmp = this.getTmpVariable();
             this.generateAnnotationCreation(annot, tmp, true);
-            writeLine("this.grammarAnnotations.Add({0});", tmp);
+            writeLine("this.grammarAnnotations.add({0});", tmp);
         }
         if (this.compiler.isLexer())
         {
@@ -873,14 +875,14 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
                 if (mode.getAnnotations().size() > 0)
                 {
                     writeLine();
-                    writeLine("annotList = new List<object>();");
-                    writeLine("this.modeAnnotations.Add({0}.{1}, annotList);", this.lexerName, mode.getName());
+                    writeLine("annotList = new ArrayList<>();");
+                    writeLine("this.modeAnnotations.put({0}.{1}, annotList);", this.lexerName, mode.getName());
                 }
                 for (Annotation annot: mode.getAnnotations())
                 {
                     String tmp = this.getTmpVariable();
                     this.generateAnnotationCreation(annot, tmp, true);
-                    writeLine("annotList.Add({0});", tmp);
+                    writeLine("annotList.add({0});", tmp);
                 }
             }
             for (LexerRule token: currentGrammar.getLexerRules())
@@ -888,8 +890,8 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
                 if (token.getAnnotations().stream().anyMatch(a -> !a.getType().isDynamic()))
                 {
                     writeLine();
-                    writeLine("annotList = new List<object>();");
-                    writeLine("this.tokenAnnotations.Add({0}.{1}, annotList);", this.lexerName, token.getName());
+                    writeLine("annotList = new ArrayList<>();");
+                    writeLine("this.tokenAnnotations.put({0}.{1}, annotList);", this.lexerName, token.getName());
                 }
                 for (Annotation annot: token.getAnnotations())
                 {
@@ -897,7 +899,7 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
                     {
                         String tmp = this.getTmpVariable();
                         this.generateAnnotationCreation(annot, tmp, true);
-                        writeLine("annotList.Add({0});", tmp);
+                        writeLine("annotList.add({0});", tmp);
                     }
                 }
             }
@@ -910,8 +912,8 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
             }
             if (rule.getAnnotations().stream().anyMatch(a -> !a.getType().isDynamic()))
             {
-                writeLine("annotList = new List<object>();");
-                writeLine("this.ruleAnnotations.Add(typeof({0}), annotList);", toContextType(rule.getName()));
+                writeLine("annotList = new ArrayList<>();");
+                writeLine("this.ruleAnnotations.put({0}.class, annotList);", toContextType(rule.getName()));
             }
             for (Annotation annot: rule.getAnnotations())
             {
@@ -919,7 +921,7 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
                 {
                     String tmp = MessageFormat.format("this.{0}_{1}", toCamelCase(rule.getName()), annot.getType().getName());
                     this.generateAnnotationCreation(annot, tmp, false);
-                    writeLine("annotList.Add({0});", tmp);
+                    writeLine("annotList.add({0});", tmp);
                 }
             }
             for (ParserRuleElement elem: rule.getElements())
@@ -941,14 +943,14 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
                 }
                 if (rule.getAnnotations().stream().anyMatch(a -> !a.getType().isDynamic()) || alt.getAnnotations().stream().anyMatch(a -> !a.getType().isDynamic()))
                 {
-                    writeLine("annotList = new List<object>();");
-                    writeLine("this.ruleAnnotations.Add(typeof({0}), annotList);", toContextType(alt.getName()));
+                    writeLine("annotList = new ArrayList<>();");
+                    writeLine("this.ruleAnnotations.put({0}.class, annotList);", toContextType(alt.getName()));
                 }
                 for (Annotation annot: rule.getAnnotations())
                 {
                     if (!annot.getType().isDynamic())
                     {
-                        writeLine("annotList.Add(this.{0}_{1});", toCamelCase(rule.getName()), annot.getType().getName());
+                        writeLine("annotList.add(this.{0}_{1});", toCamelCase(rule.getName()), annot.getType().getName());
                     }
                 }
                 for (Annotation annot: alt.getAnnotations())
@@ -957,7 +959,7 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
                     {
                         String tmp = MessageFormat.format("this.{0}_{1}", toCamelCase(alt.getName()), annot.getType().getName());
                         this.generateAnnotationCreation(annot, tmp, false);
-                        writeLine("annotList.Add({0});", tmp);
+                        writeLine("annotList.add({0});", tmp);
                     }
                 }
                 for (ParserRuleElement elem: alt.getElements())
@@ -978,49 +980,49 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
         writeLine();
         if (this.compiler.isParser())
         {
-            writeLine("public override object VisitTerminal(ITerminalNode node)");
+            writeLine("public override Object visitTerminal(TerminalNode node)");
         }
         else
         {
-            writeLine("public object VisitTerminal(ITerminalNode node, Dictionary<object, List<object>> treeAnnotations)");
+            writeLine("public Object visitTerminal(TerminalNode node, HashMap<Object, ArrayList<Object>> treeAnnotations)");
         }
         writeLine("{");
         incIndent();
         if (this.compiler.isLexer())
         {
-            writeLine("IToken token = node.Symbol;");
+            writeLine("Token token = node.getSymbol();");
             writeLine("if (token != null)");
             writeLine("{");
             incIndent();
-            writeLine("List<object> annotList = null;");
-            writeLine("if (this.tokenAnnotations.TryGetValue(token.Type, out annotList))");
+            writeLine("ArrayList<Object> annotList = this.tokenAnnotations.get(token.Type);");
+            writeLine("if (annotList != null)");
             writeLine("{");
             incIndent();
-            writeLine("List<object> treeAnnotList = null;");
-            writeLine("if (!treeAnnotations.TryGetValue(node, out treeAnnotList))");
+            writeLine("List<object> treeAnnotList = treeAnnotations.get(node);");
+            writeLine("if (treeAnnotList == null)");
             writeLine("{");
             incIndent();
-            writeLine("treeAnnotList = new List<object>();");
-            writeLine("treeAnnotations.Add(node, treeAnnotList);");
+            writeLine("treeAnnotList = new ArrayList<>();");
+            writeLine("treeAnnotations.put(node, treeAnnotList);");
             decIndent();
             writeLine("}");
-            writeLine("treeAnnotList.AddRange(annotList);");
+            writeLine("treeAnnotList.addAll(annotList);");
             decIndent();
             writeLine("}");
             decIndent();
             writeLine("}");
             if (this.compiler.isParser())
             {
-                writeLine("this.HandleSymbolType(node);");
+                writeLine("this.handleSymbolType(node);");
             }
             writeLine("return null;");
         }
         else
         {
-            writeLine("this.lexerAnnotator.VisitTerminal(node, treeAnnotations);");
+            writeLine("this.lexerAnnotator.visitTerminal(node, treeAnnotations);");
             if (this.compiler.isParser())
             {
-                writeLine("this.HandleSymbolType(node);");
+                writeLine("this.handleSymbolType(node);");
             }
             writeLine("return null;");
         }
@@ -1040,30 +1042,30 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
     private void generateOverrideSymbolType()
     {
         writeLine("");
-        writeLine("private void HandleSymbolType(IParseTree node)");
+        writeLine("private void handleSymbolType(ParseTree node)");
         writeLine("{");
         incIndent();
-        writeLine("List<object> treeAnnotList = null;");
-        writeLine("if (this.treeAnnotations.TryGetValue(node, out treeAnnotList))");
+        writeLine("ArrayList<Object> treeAnnotList = this.treeAnnotations.get(node);");
+        writeLine("if (treeAnnotList != null)");
         writeLine("{");
         incIndent();
-        writeLine("for (var treeAnnot: treeAnnotList)");
+        writeLine("for (Object treeAnnot: treeAnnotList)");
         writeLine("{");
         incIndent();
-        writeLine("SymbolTypeAnnotation sta = treeAnnot as SymbolTypeAnnotation;");
-        writeLine("if (sta != null)");
+        writeLine("if (treeAnnot instanceof SymbolTypeAnnotation)");
         writeLine("{");
         incIndent();
-        writeLine("if (sta.HasName)");
+        writeLine("SymbolTypeAnnotation sta = (SymbolTypeAnnotation)treeAnnot;");
+        writeLine("if (sta.hasName())");
         writeLine("{");
         incIndent();
-        writeLine("ModelCompilerContext.RequireContext();");
-        writeLine("IModelCompiler compiler = ModelCompilerContext.Current;");
-        writeLine("String name = compiler.getName()Provider.GetName(node);");
+        writeLine("ModelCompilerContext.requireContext();");
+        writeLine("IModelCompiler compiler = ModelCompilerContext.current();");
+        writeLine("String name = compiler.getNameProvider().getName(node);");
         writeLine("if (sta.getName() == name)");
         writeLine("{");
         incIndent();
-        writeLine("this.OverrideSymbolType(node, sta.SymbolType);");
+        writeLine("this.overrideSymbolType(node, sta.getSymbolType());");
         decIndent();
         writeLine("}");
         decIndent();
@@ -1071,20 +1073,20 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
         writeLine("else");
         writeLine("{");
         incIndent();
-        writeLine("this.OverrideSymbolType(node, sta.SymbolType);");
+        writeLine("this.overrideSymbolType(node, sta.getSymbolType());");
         decIndent();
         writeLine("}");
         decIndent();
         writeLine("}");
         decIndent();
         writeLine("}");
-        writeLine("treeAnnotList.RemoveAll(a -> a is SymbolTypeAnnotation);");
+        writeLine("treeAnnotList.removeIf(a -> a instanceof SymbolTypeAnnotation);");
         decIndent();
         writeLine("}");
         decIndent();
         writeLine("}");
         writeLine("");
-        writeLine("private void OverrideSymbolType(IParseTree node, Type symbolType)");
+        writeLine("private void overrideSymbolType(ParseTree node, Type symbolType)");
         writeLine("{");
         incIndent();
         writeLine("if (node == null) return;");
@@ -1093,34 +1095,34 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
         writeLine("while(!set && node != null)");
         writeLine("{");
         incIndent();
-        writeLine("List<object> treeAnnotList = null;");
-        writeLine("if (this.treeAnnotations.TryGetValue(node, out treeAnnotList))");
+        writeLine("ArrayList<Object> treeAnnotList = this.treeAnnotations.get(node);");
+        writeLine("if (treeAnnotList != null)");
         writeLine("{");
         incIndent();
         writeLine("for (var treeAnnot: treeAnnotList)");
         writeLine("{");
         incIndent();
-        writeLine("SymbolBasedAnnotation sta = treeAnnot as SymbolBasedAnnotation;");
-        writeLine("if (sta != null)");
+        writeLine("if (treeAnnot instanceof SymbolBasedAnnotation)");
         writeLine("{");
         incIndent();
+        writeLine("SymbolBasedAnnotation sta = (SymbolBasedAnnotation)treeAnnot;");
         writeLine("set = true;");
-        writeLine("if (sta.SymbolType == null)");
+        writeLine("if (sta.getSymbolType() == null)");
         writeLine("{");
         incIndent();
-        writeLine("sta.SymbolType = symbolType;");
+        writeLine("sta.setSymbolType(symbolType);");
         decIndent();
         writeLine("}");
-        writeLine("else if (sta.OverrideSymbolType)");
+        writeLine("else if (sta.getOverrideSymbolType())");
         writeLine("{");
         incIndent();
-        writeLine("sta.SymbolType = symbolType;");
+        writeLine("sta.setSymbolType(symbolType);");
         decIndent();
         writeLine("}");
         writeLine("else");
         writeLine("{");
         incIndent();
-        writeLine("throw new InvalidOperationException(\"Cannot change symbol type from '\"+sta.SymbolType+\"' to '\"+symbolType+\"'\");");
+        writeLine("throw new IllegalStateException(\"Cannot change symbol type from '\"+sta.getSymbolType()+\"' to '\"+symbolType+\"'\");");
         decIndent();
         writeLine("}");
         decIndent();
@@ -1129,7 +1131,7 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
         writeLine("}");
         decIndent();
         writeLine("}");
-        writeLine("node = node.Parent;");
+        writeLine("node = node.getParent();");
         decIndent();
         writeLine("}");
         decIndent();
@@ -1157,17 +1159,18 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
     private void generateAnnotatorVisitMethod(ParserRule rule, ParserRule parentRule)
     {
         writeLine();
-        writeLine("public override object Visit{0}({1} context)", toPascalCase(rule.getName()), toContextType(rule.getName()));
+        writeLine("@Override");
+        writeLine("public Object visit{0}({1} ctx)", toPascalCase(rule.getName()), toContextType(rule.getName()));
         writeLine("{");
         incIndent();
         if (rule.getAnnotations().size() > 0 || (parentRule != null && parentRule.getAnnotations().size() > 0))
         {
-            writeLine("List<object> treeAnnotList = null;");
-            writeLine("if (!this.treeAnnotations.TryGetValue(context, out treeAnnotList))");
+            writeLine("ArrayList<Object> treeAnnotList = this.treeAnnotations.get(ctx);");
+            writeLine("if (treeAnnotList == null)");
             writeLine("{");
             incIndent();
-            writeLine("treeAnnotList = new List<object>();");
-            writeLine("this.treeAnnotations.Add(context, treeAnnotList);");
+            writeLine("treeAnnotList = new ArrayList<>();");
+            writeLine("this.treeAnnotations.put(ctx, treeAnnotList);");
             decIndent();
             writeLine("}");
             if (parentRule != null)
@@ -1176,13 +1179,13 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
                 {
                     if (!annot.getType().isDynamic())
                     {
-                        writeLine("treeAnnotList.Add(this.{0}_{1});", toCamelCase(parentRule.getName()), annot.getType().getName());
+                        writeLine("treeAnnotList.add(this.{0}_{1});", toCamelCase(parentRule.getName()), annot.getType().getName());
                     }
                     else
                     {
                         String tmp = this.getTmpVariable();
                         this.generateAnnotationCreation(annot, tmp, true);
-                        writeLine("treeAnnotList.Add({0});", tmp);
+                        writeLine("treeAnnotList.add({0});", tmp);
                     }
                 }
             }
@@ -1190,54 +1193,55 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
             {
                 if (!annot.getType().isDynamic())
                 {
-                    writeLine("treeAnnotList.Add(this.{0}_{1});", toCamelCase(rule.getName()), annot.getType().getName());
+                    writeLine("treeAnnotList.add(this.{0}_{1});", toCamelCase(rule.getName()), annot.getType().getName());
                 }
                 else
                 {
                     String tmp = this.getTmpVariable();
                     this.generateAnnotationCreation(annot, tmp, true);
-                    writeLine("treeAnnotList.Add({0});", tmp);
+                    writeLine("treeAnnotList.add({0});", tmp);
                 }
             }
         }
         if (rule.HasElementAnnotations())
         {
-            writeLine("List<object> elemAnnotList = null;");
+            writeLine("ArrayList<Object> elemAnnotList = null;");
             for (ParserRuleElement elem: rule.getElements())
             {
                 if (elem.getAnnotations().size() > 0)
                 {
-                    writeLine("if (context.{0} != null)", elem.getAccessorName());
+                    writeLine("if (ctx.{0} != null)", elem.getAccessorName());
                     writeLine("{");
                     incIndent();
                     if (elem.isArray())
                     {
-                        writeLine("for(object elem: context.{0})", elem.getAccessorName());
+                        writeLine("for(Object elem: ctx.{0})", elem.getAccessorName());
                         writeLine("{");
                         incIndent();
                     }
                     else
                     {
-                        writeLine("object elem = context.{0};", elem.getAccessorName());
+                        writeLine("Object elem = ctx.{0};", elem.getAccessorName());
                     }
-                    writeLine("if (!this.treeAnnotations.TryGetValue(elem, out elemAnnotList))", elem.getAccessorName());
+                    writeLine("elemAnnotList = this.treeAnnotations.get(elem);");
+                    writeLine("if (elemAnnotList == null)", elem.getAccessorName());
                     writeLine("{");
                     incIndent();
-                    writeLine("elemAnnotList = new List<object>();");
-                    writeLine("this.treeAnnotations.Add(elem, elemAnnotList);", elem.getAccessorName());
+                    writeLine("elemAnnotList = new ArrayList<>();");
+                    writeLine("this.treeAnnotations.add(elem, elemAnnotList);", elem.getAccessorName());
                     decIndent();
                     writeLine("}");
                     for (Annotation annot: elem.getAnnotations())
                     {
                         if (!annot.getType().isDynamic())
                         {
-                            writeLine("elemAnnotList.Add(this.{0}_{1}_{2});", toCamelCase(rule.getName()), toPascalCase(elem.getName()), annot.getType().getName());
+                            writeLine("elemAnnotList.add(this.{0}_{1}_{2});", toCamelCase(rule.getName()), toPascalCase(elem.getName()), annot.getType().getName());
                         }
                         else
                         {
                             String tmp = this.getTmpVariable();
                             this.generateAnnotationCreation(annot, tmp, true);
-                            writeLine("elemAnnotList.Add({0});", tmp);
+                            writeLine("elemAnnotList.add({0});", tmp);
                         }
                     }
                     if (elem.isArray())
@@ -1250,8 +1254,8 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
                 }
             }
         }
-        this.writeLine("this.HandleSymbolType(context);");
-        this.writeLine("return base.Visit{0}(context);", toPascalCase(rule.getName()));
+        this.writeLine("this.handleSymbolType(ctx);");
+        this.writeLine("return base.visit{0}(ctx);", toPascalCase(rule.getName()));
         decIndent();
         writeLine("}");
     }
@@ -1273,12 +1277,12 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
             {
                 if ("TypeUse".equals(annot.getType().getName()) || "NameUse".equals(annot.getType().getName()))
                 {
-                    writeLine("{0}.SymbolTypes.Add(typeof({1}));", variableName, value);
+                    writeLine("{0}.getSymbolTypes().add({1}.class);", variableName, value);
                 }
                 else
                 {
                     String annotValue = this.toValue(value, annot.getType().isDynamic());
-                    writeLine("{0}.getValue()s.Add({1});", variableName, annotValue);
+                    writeLine("{0}.getValues().add({1});", variableName, annotValue);
                 }
             }
         }
@@ -1289,11 +1293,11 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
                 String annotValue = annot.getValue();
                 if ("Symbol".equals(annot.getType().getName()) || "SymbolType".equals(annot.getType().getName()) || "TypeCtr".equals(annot.getType().getName()) || "TypeDef".equals(annot.getType().getName()) || "NameCtr".equals(annot.getType().getName()) || "NameDef".equals(annot.getType().getName()))
                 {
-                    writeLine("{0}.SymbolType = typeof({1});", variableName, annotValue);
+                    writeLine("{0}.setSymbolType({1}.class);", variableName, annotValue);
                 }
                 else if ("TypeUse".equals(annot.getType().getName()) || "NameUse".equals(annot.getType().getName()))
                 {
-                    writeLine("{0}.SymbolTypes.Add(typeof({1}));", variableName, annotValue);
+                    writeLine("{0}.getSymbolTypes().add({1}.class);", variableName, annotValue);
                 }
                 else if ("Property".equals(annot.getType().getName()))
                 {
@@ -1302,12 +1306,12 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
                     {
                         String symbolType = annotValue.substring(0, dotIndex + 1).trim();
                         String propertyName = annotValue.substring(dotIndex + 1).trim();
-                        writeLine("{0}.SymbolTypes.Add(typeof({1}));", variableName, symbolType);
-                        writeLine("{0}.getName() = \"{1}\";", variableName, propertyName);
+                        writeLine("{0}.getSymbolTypes().add({1}.class);", variableName, symbolType);
+                        writeLine("{0}.setName(\"{1}\");", variableName, propertyName);
                     }
                     else
                     {
-                        writeLine("{0}.getName() = \"{1}\";", variableName, annotValue);
+                        writeLine("{0}.setName(\"{1}\");", variableName, annotValue);
                     }
                 }
                 else if ("Trivia".equals(annot.getType().getName()))
@@ -1317,26 +1321,26 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
                     {
                         String symbolType = annotValue.substring(0, dotIndex + 1).trim();
                         String propertyName = annotValue.substring(dotIndex + 1).trim();
-                        writeLine("{0}.SymbolTypes.Add(typeof({1}));", variableName, symbolType);
-                        writeLine("{0}.Property = \"{1}\";", variableName, propertyName);
+                        writeLine("{0}.getSymbolTypes().add({1}.class);", variableName, symbolType);
+                        writeLine("{0}.setProperty(\"{1}\");", variableName, propertyName);
                     }
                     else
                     {
-                        writeLine("{0}.Property = \"{1}\";", variableName, annotValue);
+                        writeLine("{0}.setProperty(\"{1}\");", variableName, annotValue);
                     }
                 }
                 else if ("EnumValue".equals(annot.getType().getName()))
                 {
-                    writeLine("{0}.EnumType = typeof({1});", variableName, annotValue);
+                    writeLine("{0}.setEnumType({1}.class);", variableName, annotValue);
                 }
                 else if ("Value".equals(annot.getType().getName()) || "PreDefSymbol".equals(annot.getType().getName()))
                 {
-                    writeLine("{0}.getValue() = {1};", variableName, annotValue);
+                    writeLine("{0}.setValue({1});", variableName, annotValue);
                 }
                 else
                 {
                     annotValue = this.toValue(annot.getValue(), annot.getType().isDynamic());
-                    writeLine("{0}.getValue() = {1};", variableName, annotValue);
+                    writeLine("{0}.setValue({1});", variableName, annotValue);
                 }
             }
         }
@@ -1349,12 +1353,12 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
                 {
                     if ("symbolTypes".equals(prop.getName()) && ("TypeUse".equals(annot.getType().getName()) || "NameUse".equals(annot.getType().getName()) || "Property".equals(annot.getType().getName()) || "Trivia".equals(annot.getType().getName())))
                     {
-                        writeLine("{0}.{1}.Add(typeof({2}));", variableName, propName, value);
+                        writeLine("{0}.{1}.add({2}.class);", variableName, propName, value);
                     }
                     else
                     {
                         String propValue = this.toValue(value, annot.getType().isDynamic());
-                        writeLine("{0}.{1}.Add({2});", variableName, propName, propValue);
+                        writeLine("{0}.{1}.add({2});", variableName, propName, propValue);
                     }
                 }
             }
@@ -1364,40 +1368,40 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
                 {
                     if ("symbolType".equals(prop.getName()) && ("Symbol".equals(annot.getType().getName()) || "SymbolType".equals(annot.getType().getName()) || "TypeCtr".equals(annot.getType().getName()) || "TypeDef".equals(annot.getType().getName()) || "NameCtr".equals(annot.getType().getName()) || "NameDef".equals(annot.getType().getName())))
                     {
-                        writeLine("{0}.{1} = typeof({2});", variableName, propName, prop.getValue());
+                        writeLine("{0}.set{1}({2}.class);", variableName, propName, prop.getValue());
                     }
                     else if (("symbolType".equals(prop.getName()) || "symbolTypes".equals(prop.getName())) && ("TypeUse".equals(annot.getType().getName()) || "NameUse".equals(annot.getType().getName()) || "Property".equals(annot.getType().getName()) || "Trivia".equals(annot.getType().getName())))
                     {
-                        writeLine("{0}.SymbolTypes.Add(typeof({2}));", variableName, propName, prop.getValue());
+                        writeLine("{0}.getSymbolTypes().add({2}.class);", variableName, propName, prop.getValue());
                     }
                     else if ("nestingProperty".equals(prop.getName()) && ("NameDef".equals(annot.getType().getName())))
                     {
-                        writeLine("{0}.{1} = \"{2}\";", variableName, propName, prop.getValue());
+                        writeLine("{0}.set{1}(\"{2}\");", variableName, propName, prop.getValue());
                     }
                     else if ("name".equals(prop.getName()) && ("Property".equals(annot.getType().getName())))
                     {
-                        writeLine("{0}.{1} = \"{2}\";", variableName, propName, prop.getValue());
+                        writeLine("{0}.set{1}(\"{2}\");", variableName, propName, prop.getValue());
                     }
                     else if ("property".equals(prop.getName()) && ("Trivia".equals(annot.getType().getName())))
                     {
-                        writeLine("{0}.{1} = \"{2}\";", variableName, propName, prop.getValue());
+                        writeLine("{0}.set{1}(\"{2}\");", variableName, propName, prop.getValue());
                     }
                     else if ("position".equals(prop.getName()) && ("Trivia".equals(annot.getType().getName())))
                     {
-                        writeLine("{0}.{1} = {2};", variableName, propName, prop.getValue());
+                        writeLine("{0}.set{1}({2});", variableName, propName, prop.getValue());
                     }
                     else if ("value".equals(prop.getName()) && ("Value".equals(annot.getType().getName())))
                     {
-                        writeLine("{0}.{1} = {2};", variableName, propName, prop.getValue());
+                        writeLine("{0}.set{1}({2});", variableName, propName, prop.getValue());
                     }
                     else if ("value".equals(prop.getName()) && ("PreDefSymbol".equals(annot.getType().getName())))
                     {
-                        writeLine("{0}.{1} = {2};", variableName, propName, prop.getValue());
+                        writeLine("{0}.set{1}({2});", variableName, propName, prop.getValue());
                     }
                     else
                     {
                         String propValue = this.toValue(prop.getValue(), annot.getType().isDynamic());
-                        writeLine("{0}.{1} = {2};", variableName, propName, propValue);
+                        writeLine("{0}.set{1}({2});", variableName, propName, propValue);
                     }
                 }
             }
@@ -1408,7 +1412,7 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
     private void generatePropertyEvaluator()
     {
         writeLine();
-        writeLine("public class {0}PropertyEvaluator : MetaCompilerPropertyEvaluator, I{0}Visitor<object>", this.parserName);
+        writeLine("public class {0}PropertyEvaluator extends MetaCompilerPropertyEvaluator implements {0}Visitor<Object>", this.parserName);
         writeLine("{");
         incIndent();
         writeLine("public {0}PropertyEvaluator(MetaCompiler compiler)", this.parserName);
@@ -1441,7 +1445,7 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
     private void generatePropertyVisitMethod(ParserRule rule, ParserRule parentRule)
     {
         writeLine();
-        writeLine("public virtual object Visit{0}({1} context)", toPascalCase(rule.getName()), toContextType(rule.getName()));
+        writeLine("public Object visit{0}({1} ctx)", toPascalCase(rule.getName()), toContextType(rule.getName()));
         writeLine("{");
         incIndent();
         if (rule.getPropertiesBlock() != null)
@@ -1459,7 +1463,7 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
                 this.propertiesBlockExpressionPrinter.visit(propertiesBlock);
             }
         }
-        this.writeLine("return this.VisitChildren(context);");
+        this.writeLine("return this.visitChildren(ctx);");
         decIndent();
         writeLine("}");
     }
@@ -1498,61 +1502,62 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
         }
         if (this.generateCompilerBase)
         {
-            writeLine("public abstract class {0} : MetaCompiler", name);
+            writeLine("public abstract class {0} extends MetaCompiler", name);
         }
         else
         {
-            writeLine("public class {0} : MetaCompiler", name);
+            writeLine("public class {0} extends MetaCompiler", name);
         }
         writeLine("{");
         incIndent();
         writeLine("public {0}(String source, String fileName)", name);
-        incIndent();
-        writeLine(": base(source, fileName)");
-        decIndent();
         writeLine("{");
+        incIndent();
+        writeLine("super(source, fileName)");
+        decIndent();
         writeLine("}");
         writeLine();
-        writeLine("protected override void DoCompile()");
+        writeLine("@Override");
+        writeLine("protected void doCompile()");
         writeLine("{");
         incIndent();
-        writeLine("AntlrInputStream inputStream = new AntlrInputStream(this.Source);");
-        writeLine("this.Lexer = new {0}(inputStream);", this.lexerName);
-        writeLine("this.Lexer.AddErrorListener(this);");
-        writeLine("this.CommonTokenStream = new CommonTokenStream(this.Lexer);");
-        writeLine("this.Parser = new {0}(this.CommonTokenStream);", this.parserName);
-        writeLine("this.Parser.AddErrorListener(this);");
-        writeLine("this.ParseTree = this.Parser.{0};", rootName);
+        writeLine("ANTLRInputStream inputStream = new ANTLRInputStream(this.getSource());");
+        writeLine("this.lexer = new {0}(inputStream);", this.lexerName);
+        writeLine("this.lexer.addErrorListener(this);");
+        writeLine("this.setCommonTokenStream(new CommonTokenStream(this.lexer));");
+        writeLine("this.parser = new {0}(this.getCommonTokenStream());", this.parserName);
+        writeLine("this.parser.addErrorListener(this);");
+        writeLine("this.parseTree = this.parser.{0};", rootName);
         writeLine("{0}Annotator annotator = new {0}Annotator();", this.parserName);
-        writeLine("annotator.Visit(this.ParseTree);");
-        writeLine("this.LexerAnnotations = annotator.LexerAnnotations;");
-        writeLine("this.ParserAnnotations = annotator.ParserAnnotations;");
-        writeLine("this.ModeAnnotations = annotator.ModeAnnotations;");
-        writeLine("this.TokenAnnotations = annotator.TokenAnnotations;");
-        writeLine("this.RuleAnnotations = annotator.RuleAnnotations;");
-        writeLine("this.TreeAnnotations = annotator.TreeAnnotations;");
+        writeLine("annotator.visit(this.parseTree);");
+        writeLine("this.setLexerAnnotations(annotator.getLexerAnnotations());");
+        writeLine("this.setParserAnnotations(annotator.getParserAnnotations());");
+        writeLine("this.setModeAnnotations(annotator.getModeAnnotations());");
+        writeLine("this.setTokenAnnotations(annotator.getTokenAnnotations());");
+        writeLine("this.setRuleAnnotations(annotator.getRuleAnnotations());");
+        writeLine("this.setTreeAnnotations(annotator.getTreeAnnotations());");
         writeLine("MetaCompilerDefinitionPhase definitionPhase = new MetaCompilerDefinitionPhase(this);");
-        writeLine("definitionPhase.VisitNode(this.ParseTree);");
+        writeLine("definitionPhase.visitNode(this.parseTree);");
         writeLine("MetaCompilerMergePhase mergePhase = new MetaCompilerMergePhase(this);");
-        writeLine("mergePhase.VisitNode(this.ParseTree);");
+        writeLine("mergePhase.visitNode(this.parseTree);");
         writeLine("MetaCompilerReferencePhase referencePhase = new MetaCompilerReferencePhase(this);");
-        writeLine("referencePhase.VisitNode(this.ParseTree);");
+        writeLine("referencePhase.visitNode(this.parseTree);");
         writeLine("{0}PropertyEvaluator propertyEvaluator = new {0}PropertyEvaluator(this);", this.parserName);
-        writeLine("propertyEvaluator.Visit(this.ParseTree);");
+        writeLine("propertyEvaluator.visit(this.parseTree);");
         writeLine();
-        writeLine("for (var symbol: this.Data.GetSymbols())");
+        writeLine("for (var symbol: this.getData().getSymbols())");
         writeLine("{");
         incIndent();
-        writeLine("symbol.MEvalLazyValues();");
+        writeLine("symbol.mEvalLazyValues();");
         decIndent();
         writeLine("}");
-        writeLine("for (var symbol: this.Data.GetSymbols())");
+        writeLine("for (var symbol: this.getData().getSymbols())");
         writeLine("{");
         incIndent();
-        writeLine("if (symbol.MHasUninitializedValue())");
+        writeLine("if (symbol.mHasUninitializedValue())");
         writeLine("{");
         incIndent();
-        writeLine("this.Diagnostics.AddError(\"The symbol '\" + symbol + \"' has uninitialized lazy values.\", this.FileName, new TextSpan(), true);");
+        writeLine("this.getDiagnostics().addError(\"The symbol '\" + symbol + \"' has uninitialized lazy values.\", this.getFileName(), new TextSpan(), true);");
         decIndent();
         writeLine("}");
         decIndent();
@@ -1560,9 +1565,12 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
         decIndent();
         writeLine("}");
         writeLine();
-        writeLine("public "+ rootType + " ParseTree { get; private set; }");
-        writeLine("public "+ this.lexerName + " Lexer { get; private set; }");
-        writeLine("public "+ this.parserName + " Parser { get; private set; }");
+        writeLine("private "+ rootType + " parseTree;");
+        writeLine("private "+ this.lexerName + " lexer;");
+        writeLine("private "+ this.parserName + " parser;");
+        writeLine("public "+ rootType + " getParseTree() { return this."+rootType+"; }");
+        writeLine("public "+ this.lexerName + " getLexer() { return this."+this.lexerName+"Lexer; }");
+        writeLine("public "+ this.parserName + " getParser() { return this."+this.parserName+"Parser; }");
         decIndent();
         writeLine("}");
     }
