@@ -40,7 +40,7 @@ public class DiagnosticMessage implements Comparable<DiagnosticMessage> {
 
 	@Override
 	public String toString() {
-        return MessageFormat.format("{0} in '{1}' ({2},{3}): {6}", this.severity, this.fileName, this.textSpan.getStartLine(), this.textSpan.getStartPosition(), this.textSpan.getEndLine(), this.textSpan.getEndPosition(), this.message);
+        return MessageFormat.format("{0} in \'{1}\' ({2},{3}): {6}", this.severity, this.fileName, this.textSpan.getStartLine(), this.textSpan.getStartPosition(), this.textSpan.getEndLine(), this.textSpan.getEndPosition(), this.message);
 	}
 
 	@Override

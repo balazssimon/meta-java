@@ -1,4 +1,4 @@
-﻿parser grammar MetaModelParser;
+parser grammar MetaModelParser;
 
 options
 {
@@ -351,3 +351,4 @@ $TypeParam
 genericTypeParam : identifier;
 
 */
+

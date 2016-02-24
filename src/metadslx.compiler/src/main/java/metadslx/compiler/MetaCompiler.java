@@ -1,7 +1,7 @@
 package metadslx.compiler;
 
 import java.util.BitSet;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -27,58 +27,53 @@ import metadslx.core.ModelContextScope;
 import metadslx.core.RootScope;
 
 public abstract class MetaCompiler implements IModelCompiler, IAntlr4Compiler {
-    private ModelCompilerDiagnostics diagnostics;
-    private String fileName;
-    private String source;
-    private String defaultNamespace;
-    private RootScope globalScope;
-    private Model model;
-    private ITriviaProvider triviaProvider;
-    private INameProvider nameProvider;
-    private ITypeProvider typeProvider;
-    private IResolutionProvider resolutionProvider;
-    private IBindingProvider bindingProvider;
-    
-    private MetaCompilerData data;
-    private CommonTokenStream commonTokenStream;
+	private ModelCompilerDiagnostics diagnostics;
+	private String fileName;
+	private String source;
+	private String defaultPackage;
+	private RootScope globalScope;
+	private Model model;
+	private ITriviaProvider triviaProvider;
+	private INameProvider nameProvider;
+	private ITypeProvider typeProvider;
+	private IResolutionProvider resolutionProvider;
+	private IBindingProvider bindingProvider;
+
+	private MetaCompilerData data;
+	private CommonTokenStream commonTokenStream;
 	private List<Object> lexerAnnotations;
 	private List<Object> parserAnnotations;
-	private HashMap<Integer, List<Object>> modeAnnotations;
-	private HashMap<Integer, List<Object>> tokenAnnotations;
-	private HashMap<Class, List<Object>> ruleAnnotations;
-	private HashMap<Object, List<Object>> treeAnnotations;
-    
-    public MetaCompiler(String source, String fileName) {
-        this.diagnostics = new ModelCompilerDiagnostics();
-        this.source = source;
-        this.fileName = fileName;
-        this.globalScope = new RootScope();
-        this.model = new Model();
-        this.data = new MetaCompilerData(this);
-        // TODO:
-        //this.triviaProvider = new Antlr4DefaultTriviaProvider(this);
-        //this.nameProvider = new Antlr4DefaultNameProvider();
-        this.typeProvider = new DefaultTypeProvider();
-        this.resolutionProvider = new DefaultResolutionProvider();
-        this.bindingProvider = new DefaultBindingProvider();
-    }
-    
-    
-    public void compile() {
-        try (ModelContextScope mcs = new ModelContextScope(this.getModel()))
-        {
-	        try (ModelCompilerContextScope mccs = new ModelCompilerContextScope(this))
-	        {
-	            this.doCompile();
-	        } catch (Exception e) {
+	private Map<Integer, List<Object>> modeAnnotations;
+	private Map<Integer, List<Object>> tokenAnnotations;
+	private Map<Class, List<Object>> ruleAnnotations;
+	private Map<Object, List<Object>> treeAnnotations;
+
+	public MetaCompiler(String source, String fileName) {
+		this.diagnostics = new ModelCompilerDiagnostics();
+		this.source = source;
+		this.fileName = fileName;
+		this.globalScope = new RootScope();
+		this.model = new Model();
+		this.data = new MetaCompilerData(this);
+		this.triviaProvider = new Antlr4DefaultTriviaProvider(this);
+		this.nameProvider = new Antlr4DefaultNameProvider();
+		this.typeProvider = new DefaultTypeProvider();
+		this.resolutionProvider = new DefaultResolutionProvider();
+		this.bindingProvider = new DefaultBindingProvider();
+	}
+
+	public void compile() {
+		try (ModelContextScope mcs = new ModelContextScope(this.getModel())) {
+			try (ModelCompilerContextScope mccs = new ModelCompilerContextScope(this)) {
+				this.doCompile();
+			} catch (Exception e) {
 				throw new MetaCompilerException(e);
 			}
-        }
-    }
-    
-    protected abstract void doCompile();
-    
-    
+		}
+	}
+
+	protected abstract void doCompile();
+
 	public ModelCompilerDiagnostics getDiagnostics() {
 		return diagnostics;
 	}
@@ -91,12 +86,12 @@ public abstract class MetaCompiler implements IModelCompiler, IAntlr4Compiler {
 		return source;
 	}
 
-	public String getDefaultNamespace() {
-		return defaultNamespace;
+	public String getDefaultPackage() {
+		return defaultPackage;
 	}
 
-	public void setDefaultNamespace(String defaultNamespace) {
-		this.defaultNamespace = defaultNamespace;
+	public void setDefaultPackage(String defaultPackage) {
+		this.defaultPackage = defaultPackage;
 	}
 
 	public RootScope getGlobalScope() {
@@ -154,7 +149,7 @@ public abstract class MetaCompiler implements IModelCompiler, IAntlr4Compiler {
 	protected void setBindingProvider(IBindingProvider bindingProvider) {
 		this.bindingProvider = bindingProvider;
 	}
-	
+
 	public MetaCompilerData getData() {
 		return data;
 	}
@@ -162,7 +157,7 @@ public abstract class MetaCompiler implements IModelCompiler, IAntlr4Compiler {
 	protected void setData(MetaCompilerData data) {
 		this.data = data;
 	}
-	
+
 	public CommonTokenStream getCommonTokenStream() {
 		return commonTokenStream;
 	}
@@ -170,7 +165,6 @@ public abstract class MetaCompiler implements IModelCompiler, IAntlr4Compiler {
 	protected void setCommonTokenStream(CommonTokenStream commonTokenStream) {
 		this.commonTokenStream = commonTokenStream;
 	}
-
 
 	public List<Object> getLexerAnnotations() {
 		return lexerAnnotations;
@@ -188,46 +182,47 @@ public abstract class MetaCompiler implements IModelCompiler, IAntlr4Compiler {
 		this.parserAnnotations = parserAnnotations;
 	}
 
-	public HashMap<Integer, List<Object>> getModeAnnotations() {
+	public Map<Integer, List<Object>> getModeAnnotations() {
 		return modeAnnotations;
 	}
 
-	protected void setModeAnnotations(HashMap<Integer, List<Object>> modeAnnotations) {
+	protected void setModeAnnotations(Map<Integer, List<Object>> modeAnnotations) {
 		this.modeAnnotations = modeAnnotations;
 	}
 
-	public HashMap<Integer, List<Object>> getTokenAnnotations() {
+	public Map<Integer, List<Object>> getTokenAnnotations() {
 		return tokenAnnotations;
 	}
 
-	protected void setTokenAnnotations(HashMap<Integer, List<Object>> tokenAnnotations) {
+	protected void setTokenAnnotations(Map<Integer, List<Object>> tokenAnnotations) {
 		this.tokenAnnotations = tokenAnnotations;
 	}
 
-	public HashMap<Class, List<Object>> getRuleAnnotations() {
+	public Map<Class, List<Object>> getRuleAnnotations() {
 		return ruleAnnotations;
 	}
 
-	protected void setRuleAnnotations(HashMap<Class, List<Object>> ruleAnnotations) {
+	protected void setRuleAnnotations(Map<Class, List<Object>> ruleAnnotations) {
 		this.ruleAnnotations = ruleAnnotations;
 	}
 
-	public HashMap<Object, List<Object>> getTreeAnnotations() {
+	public Map<Object, List<Object>> getTreeAnnotations() {
 		return treeAnnotations;
 	}
 
-	protected void setTreeAnnotations(HashMap<Object, List<Object>> treeAnnotations) {
+	protected void setTreeAnnotations(Map<Object, List<Object>> treeAnnotations) {
 		this.treeAnnotations = treeAnnotations;
 	}
-	
+
 	@Override
 	public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
 			String msg, RecognitionException e) {
-        if (offendingSymbol != null) {
-            this.getDiagnostics().addError(msg, this.getFileName(), new Antlr4TextSpan(offendingSymbol), false);
-        } else {
-            this.getDiagnostics().addError(msg, this.getFileName(), new Antlr4TextSpan(line, charPositionInLine + 1, line, charPositionInLine + 1), false);
-        }
+		if (offendingSymbol != null) {
+			this.getDiagnostics().addError(msg, this.getFileName(), new Antlr4TextSpan(offendingSymbol), false);
+		} else {
+			this.getDiagnostics().addError(msg, this.getFileName(),
+					new Antlr4TextSpan(line, charPositionInLine + 1, line, charPositionInLine + 1), false);
+		}
 	}
 
 	@Override
@@ -244,6 +239,5 @@ public abstract class MetaCompiler implements IModelCompiler, IAntlr4Compiler {
 	public void reportContextSensitivity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, int prediction,
 			ATNConfigSet configs) {
 	}
-
 
 }

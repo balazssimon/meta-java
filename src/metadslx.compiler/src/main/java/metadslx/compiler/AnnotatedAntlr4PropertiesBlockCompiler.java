@@ -17,11 +17,11 @@ class AnnotatedAntlr4PropertiesBlockCompiler implements ANTLRErrorListener {
 	private int startLine;
 	private int startPos;
 	private boolean hasErrors;
-	
+
 	public AnnotatedAntlr4PropertiesBlockCompiler(MetaCompiler compiler) {
 		this.compiler = compiler;
 	}
-	
+
 	public int getStartLine() {
 		return startLine;
 	}
@@ -46,50 +46,42 @@ class AnnotatedAntlr4PropertiesBlockCompiler implements ANTLRErrorListener {
 		return compiler;
 	}
 
-
-    public AnnotatedAntlr4PropertiesParser.PropertiesBlockContext compile(String propertiesBlock)
-    {
-        try
-        {
-            this.hasErrors = false;
-            ANTLRInputStream inputStream = new ANTLRInputStream(propertiesBlock);
-            AnnotatedAntlr4PropertiesLexer lexer = new AnnotatedAntlr4PropertiesLexer(inputStream);
-            lexer.addErrorListener(this);
-            CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
-            AnnotatedAntlr4PropertiesParser parser = new AnnotatedAntlr4PropertiesParser(commonTokenStream);
-            parser.addErrorListener(this);
-            return parser.propertiesBlock();
-        }
-        catch (Exception ex)
-        {
-            this.hasErrors = true;
-            this.compiler.getDiagnostics().addError(ex.toString(), this.compiler.getFileName(), new Antlr4TextSpan(this.startLine, this.startPos, this.startLine, this.startPos), true);
-        }
-        return null;
-    }
+	public AnnotatedAntlr4PropertiesParser.PropertiesBlockContext compile(String propertiesBlock) {
+		try {
+			this.hasErrors = false;
+			ANTLRInputStream inputStream = new ANTLRInputStream(propertiesBlock);
+			AnnotatedAntlr4PropertiesLexer lexer = new AnnotatedAntlr4PropertiesLexer(inputStream);
+			lexer.addErrorListener(this);
+			CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
+			AnnotatedAntlr4PropertiesParser parser = new AnnotatedAntlr4PropertiesParser(commonTokenStream);
+			parser.addErrorListener(this);
+			return parser.propertiesBlock();
+		} catch (Exception ex) {
+			this.hasErrors = true;
+			this.compiler.getDiagnostics().addError(ex.toString(), this.compiler.getFileName(),
+					new Antlr4TextSpan(this.startLine, this.startPos, this.startLine, this.startPos), true);
+		}
+		return null;
+	}
 
 	@Override
 	public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
 			String msg, RecognitionException e) {
 		Antlr4TextSpan antlr4TextSpan;
-        if (offendingSymbol instanceof Token) {
-        	antlr4TextSpan = new Antlr4TextSpan((Token)offendingSymbol);
-        	antlr4TextSpan = new Antlr4TextSpan(
-        		this.startLine+antlr4TextSpan.getStartLine()-1,
-        		antlr4TextSpan.getStartLine() == 1 ? this.startPos+antlr4TextSpan.getStartPosition()-1 : antlr4TextSpan.getStartPosition(),
-           		this.startLine+antlr4TextSpan.getEndLine()-1,
-        		antlr4TextSpan.getEndLine() == 1 ? this.startPos+antlr4TextSpan.getEndPosition()-1 : antlr4TextSpan.getEndPosition()
-        		);
-        } else {
-        	antlr4TextSpan = new Antlr4TextSpan(
-        		this.startLine+line,
-        		line == 1 ? this.startPos+charPositionInLine : charPositionInLine+1,
-        		this.startLine+line,
-        		line == 1 ? this.startPos+charPositionInLine : charPositionInLine+1
-        		);
-        }
-        this.hasErrors = true;
-        this.compiler.getDiagnostics().addError(msg, this.compiler.getFileName(), antlr4TextSpan, false);
+		if (offendingSymbol instanceof Token) {
+			antlr4TextSpan = new Antlr4TextSpan((Token) offendingSymbol);
+			antlr4TextSpan = new Antlr4TextSpan(this.startLine + antlr4TextSpan.getStartLine() - 1,
+					antlr4TextSpan.getStartLine() == 1 ? this.startPos + antlr4TextSpan.getStartPosition() - 1
+							: antlr4TextSpan.getStartPosition(),
+					this.startLine + antlr4TextSpan.getEndLine() - 1, antlr4TextSpan.getEndLine() == 1
+							? this.startPos + antlr4TextSpan.getEndPosition() - 1 : antlr4TextSpan.getEndPosition());
+		} else {
+			antlr4TextSpan = new Antlr4TextSpan(this.startLine + line,
+					line == 1 ? this.startPos + charPositionInLine : charPositionInLine + 1, this.startLine + line,
+					line == 1 ? this.startPos + charPositionInLine : charPositionInLine + 1);
+		}
+		this.hasErrors = true;
+		this.compiler.getDiagnostics().addError(msg, this.compiler.getFileName(), antlr4TextSpan, false);
 	}
 
 	@Override
@@ -106,6 +98,5 @@ class AnnotatedAntlr4PropertiesBlockCompiler implements ANTLRErrorListener {
 	public void reportContextSensitivity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, int prediction,
 			ATNConfigSet configs) {
 	}
-
 
 }

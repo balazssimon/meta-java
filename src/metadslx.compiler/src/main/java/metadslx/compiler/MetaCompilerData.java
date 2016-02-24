@@ -10,13 +10,13 @@ import metadslx.core.ModelFactory;
 import metadslx.core.ModelObject;
 
 public class MetaCompilerData {
-    private HashSet<ModelObject> symbols;
-    private MetaCompiler compiler;
-    private ModelFactory modelFactory;
-    public HashMap<ParseTree, ModelObject> nodeToSymbol;
-    public HashMap<ParseTree, Lazy<Object>> lazyNodeToSymbol;
+	private HashSet<ModelObject> symbols;
+	private MetaCompiler compiler;
+	private ModelFactory modelFactory;
+	public HashMap<ParseTree, ModelObject> nodeToSymbol;
+	public HashMap<ParseTree, Lazy<Object>> lazyNodeToSymbol;
 
-    public MetaCompilerData(MetaCompiler compiler) {
+	public MetaCompilerData(MetaCompiler compiler) {
 		this.compiler = compiler;
 		this.modelFactory = new ModelFactory();
 		this.symbols = new HashSet<>();
@@ -43,56 +43,51 @@ public class MetaCompilerData {
 	public HashMap<ParseTree, Lazy<Object>> getLazyNodeToSymbol() {
 		return lazyNodeToSymbol;
 	}
-    
-    public void registerSymbol(ParseTree node, ModelObject symbol)
-    {
-        if (symbol == null) return;
-        if (node != null)
-        {
-            this.nodeToSymbol.put(node, symbol);
-        }
-        this.symbols.add(symbol);
-    }
 
-    public void registerLazySymbol(ParseTree node, Lazy<Object> symbol)
-    {
-        if (symbol == null) return;
-        if (node != null)
-        {
-            this.lazyNodeToSymbol.put(node, symbol);
-        }
-    }
+	public void registerSymbol(ParseTree node, ModelObject symbol) {
+		if (symbol == null)
+			return;
+		if (node != null) {
+			this.nodeToSymbol.put(node, symbol);
+		}
+		this.symbols.add(symbol);
+	}
 
-    public void replaceSymbol(ParseTree node, ModelObject oldSymbol, ModelObject newSymbol)
-    {
-        if (oldSymbol == null) return;
-        if (newSymbol == null) return;
-        if (oldSymbol == newSymbol) return;
-        if (node != null)
-        {
-            this.nodeToSymbol.put(node, newSymbol);
-        }
-        this.symbols.remove(oldSymbol);
-        this.symbols.add(newSymbol);
-    }
+	public void registerLazySymbol(ParseTree node, Lazy<Object> symbol) {
+		if (symbol == null)
+			return;
+		if (node != null) {
+			this.lazyNodeToSymbol.put(node, symbol);
+		}
+	}
 
-    public ModelObject getSymbol(ParseTree node)
-    {
-        ModelObject symbol = this.nodeToSymbol.get(node);
-        if (symbol != null)
-        {
-            return symbol;
-        }
-        Lazy<Object> lazySymbol = this.lazyNodeToSymbol.get(node);
-        if (lazySymbol != null)
-        {
-            if (lazySymbol.value() instanceof ModelObject)
-            {
-                symbol = (ModelObject)lazySymbol.value();
-                this.nodeToSymbol.put(node, symbol);
-            }
-            return symbol;
-        }
-        return null;
-    }
+	public void replaceSymbol(ParseTree node, ModelObject oldSymbol, ModelObject newSymbol) {
+		if (oldSymbol == null)
+			return;
+		if (newSymbol == null)
+			return;
+		if (oldSymbol == newSymbol)
+			return;
+		if (node != null) {
+			this.nodeToSymbol.put(node, newSymbol);
+		}
+		this.symbols.remove(oldSymbol);
+		this.symbols.add(newSymbol);
+	}
+
+	public ModelObject getSymbol(ParseTree node) {
+		ModelObject symbol = this.nodeToSymbol.get(node);
+		if (symbol != null) {
+			return symbol;
+		}
+		Lazy<Object> lazySymbol = this.lazyNodeToSymbol.get(node);
+		if (lazySymbol != null) {
+			if (lazySymbol.value() instanceof ModelObject) {
+				symbol = (ModelObject) lazySymbol.value();
+				this.nodeToSymbol.put(node, symbol);
+			}
+			return symbol;
+		}
+		return null;
+	}
 }

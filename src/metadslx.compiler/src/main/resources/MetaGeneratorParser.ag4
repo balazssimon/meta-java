@@ -1,9 +1,9 @@
-﻿parser grammar MetaGeneratorParser;
+parser grammar MetaGeneratorParser;
 
 options 
 { 
     tokenVocab = MetaGeneratorLexer;
-	                         
+	generateCompiler = false;
 }
 
 main : namespaceDeclaration generatorDeclaration usingDeclaration* configDeclaration? methodDeclaration*;

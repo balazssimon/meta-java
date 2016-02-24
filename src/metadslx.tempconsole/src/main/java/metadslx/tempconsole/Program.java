@@ -1,14 +1,15 @@
 package metadslx.tempconsole;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.channels.ScatteringByteChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 
+import metadslx.compiler.AnnotatedAntlr4Compiler;
 import metadslx.compiler.MetaGeneratorCompiler;
 import metadslx.compiler.MetaGeneratorGenerator;
 import metadslx.core.DiagnosticMessage;
@@ -33,7 +34,7 @@ public class Program {
 				Object value = mo.mGet(nameProp);
 				System.out.println(mo+": "+value);
 			}*/
-			compileGenerator("src/main/java/metadslx/tempconsole/GenTest.mgen", "src/main/java/metadslx/tempconsole/GenTest.java");
+			/*compileGenerator("src/main/java/metadslx/tempconsole/GenTest.mgen", "src/main/java/metadslx/tempconsole/GenTest.java");
 			ArrayList<String> sl = new ArrayList<>();
 			sl.add("AAA");
 			sl.add("BBB");
@@ -45,15 +46,71 @@ public class Program {
 			pl.add(new Person("YYY", 40));
 			pl.add(new Student("UUU", "RST456", 50));
 			GenTest gt = new GenTest(pl);
-			System.out.println(gt.generate());
+			System.out.println(gt.generate());*/
+			compileAG4("../metadslx.compiler/src/main", "../metadslx.compiler/src/generated", "AnnotatedAntlr4Lexer");
+			compileAG4("../metadslx.compiler/src/main", "../metadslx.compiler/src/generated", "AnnotatedAntlr4Parser");
+			compileAG4("../metadslx.compiler/src/main", "../metadslx.compiler/src/generated", "AnnotatedAntlr4PropertiesLexer");
+			compileAG4("../metadslx.compiler/src/main", "../metadslx.compiler/src/generated", "AnnotatedAntlr4PropertiesParser");
+			compileAG4("../metadslx.compiler/src/main", "../metadslx.compiler/src/generated", "MetaGeneratorLexer");
+			compileAG4("../metadslx.compiler/src/main", "../metadslx.compiler/src/generated", "MetaGeneratorParser");
+			compileAG4("../metadslx.compiler/src/main", "../metadslx.compiler/src/generated", "MetaModelLexer");
+			compileAG4("../metadslx.compiler/src/main", "../metadslx.compiler/src/generated", "MetaModelParser");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 	
-	private static void compileGenerator(String fileName, String outputFileName) {
+    public static void compileAG4(String inputDirectory, String outputDirectory, String antlr4FileName)
+    {
 		try {		
-			String source = readFile(fileName, StandardCharsets.UTF_8);
+	        String fileName = new File(inputDirectory+"/resources", antlr4FileName + ".ag4").getAbsolutePath();
+	        String source = readFile(fileName);
+	        
+	        AnnotatedAntlr4Compiler compiler = new AnnotatedAntlr4Compiler(source, outputDirectory, fileName);
+	        compiler.setDefaultPackage("metadslx.compiler");
+	        compiler.compile();
+	        String outputFileName = new File(outputDirectory+"/java/"+compiler.getDefaultPackage().replace('.', '/'), compiler.getGeneratedAnnotatorName()+".java").getAbsolutePath();
+	        try (PrintWriter writer = new PrintWriter(outputFileName))
+	        {
+	        	writer.println(compiler.getGeneratedAnnotatorSource());
+	        }
+	        String propEvalSrc = compiler.getGeneratedPropertyEvaluatorSource();
+	        if (propEvalSrc != null) {
+		        outputFileName = new File(outputDirectory+"/java/"+compiler.getDefaultPackage().replace('.', '/'), compiler.getGeneratedPropertyEvaluatorName()+".java").getAbsolutePath();
+		        try (PrintWriter writer = new PrintWriter(outputFileName))
+		        {
+		        	writer.println(propEvalSrc);
+		        }
+	        }
+	        String compSrc = compiler.getGeneratedCompilerSource();
+	        if (compSrc != null) {
+		        outputFileName = new File(outputDirectory+"/java/"+compiler.getDefaultPackage().replace('.', '/'), compiler.getGeneratedCompilerName()+".java").getAbsolutePath();
+		        try (PrintWriter writer = new PrintWriter(outputFileName))
+		        {
+		        	writer.println(compSrc);
+		        }
+	        }
+	        String g4outputFileName = new File(outputDirectory+"/resources", antlr4FileName + ".g4").getAbsolutePath();
+	        try (PrintWriter writer = new PrintWriter(g4outputFileName))
+	        {
+	            writer.println(compiler.getGeneratedAntlr4Source());
+	        }
+	        try (PrintWriter writer = new PrintWriter("messages_a4.txt"))
+	        {
+	            for (DiagnosticMessage msg: compiler.getDiagnostics().getMessages(true))
+	            {
+	                writer.println(msg);
+	                System.out.println(msg);
+	            }
+	        }
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+    }
+	
+	public static void compileGenerator(String fileName, String outputFileName) {
+		try {		
+			String source = readFile(fileName);
 			MetaGeneratorCompiler mgc = new MetaGeneratorCompiler(source, fileName);
 			mgc.compile();
 			if (!mgc.getDiagnostics().hasErrors()) {
@@ -72,6 +129,11 @@ public class Program {
 		}
 	}
 
+	static String readFile(String path) throws IOException 
+	{
+		return readFile(path, StandardCharsets.UTF_8);
+	}
+	
 	static String readFile(String path, Charset encoding) throws IOException 
 	{
 	  byte[] encoded = Files.readAllBytes(Paths.get(path));

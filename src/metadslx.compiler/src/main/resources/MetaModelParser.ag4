@@ -1,0 +1,353 @@
+parser grammar MetaModelParser;
+
+options
+{
+    tokenVocab = MetaModelLexer; 
+	generateCompilerBase=true;
+}
+
+@header {
+import metadslx.core.*;
+}
+
+main: namespaceDeclaration;
+
+$QualifiedName
+qualifiedName : identifier (TDot identifier)*;
+identifierList : identifier (TComma identifier)*;
+qualifiedNameList : qualifiedName (TComma qualifiedName)*;
+
+$Property(Annotations)
+$Symbol(MetaAnnotation)
+annotation : TOpenBracket $Property(Name) $Value identifier annotationParams? TCloseBracket;
+annotationParams : TOpenParen annotationParamList? TCloseParen;
+annotationParamList : annotationParam (TComma annotationParam)*;
+
+$Property(Properties)
+$Symbol(MetaAnnotationProperty)
+annotationParam : $Property(Name) $Value identifier TAssign $Property(Value) expression;
+
+
+$NameDef(symbolType=MetaNamespace,nestingProperty=Namespaces,merge=true)
+$Trivia(Documentation)
+namespaceDeclaration: annotation* KNamespace qualifiedName TOpenBrace metamodelDeclaration declaration* TCloseBrace;
+
+$Property(MetaModel)
+$NameDef(MetaModel)
+$Trivia(Documentation)
+metamodelDeclaration: annotation* KMetamodel identifier (TOpenParen metamodelPropertyList? TCloseParen)? TSemicolon;
+
+metamodelPropertyList : metamodelProperty (TComma metamodelProperty)*;
+
+$Property
+metamodelProperty : identifier TAssign $Value stringLiteral;
+
+declaration : enumDeclaration | classDeclaration | associationDeclaration | constDeclaration | functionDeclaration;
+
+$Property(Declarations) 
+$TypeDef(MetaEnum)
+$Trivia(Documentation)
+enumDeclaration : annotation* KEnum identifier TOpenBrace $Property(EnumLiterals) enumValues (TSemicolon enumMemberDeclaration*)? TCloseBrace;
+enumValues : enumValue (TComma enumValue)*;
+$NameDef(MetaEnumLiteral)
+$Trivia(Documentation)
+enumValue : annotation* identifier;
+enumMemberDeclaration : $Property(Operations) operationDeclaration;
+
+$Property(Declarations) 
+$TypeDef(MetaClass)
+$Trivia(Documentation)
+classDeclaration : annotation* $Property(name=IsAbstract,value=true) KAbstract? KClass identifier (TColon $Property(SuperClasses) classAncestors)? TOpenBrace classMemberDeclaration* TCloseBrace;
+classAncestors : classAncestor (TComma classAncestor)*;
+classAncestor : $TypeUse(symbolType=MetaClass,resolveFlags=ResolveFlags.Parent) qualifiedName;
+classMemberDeclaration 
+	: $Property(Properties) fieldDeclaration 
+	| $Property(Operations) operationDeclaration
+	| $Property(Constructor) constructorDeclaration
+	;
+
+$NameDef(MetaProperty)
+$Trivia(Documentation)
+fieldDeclaration : annotation* $Property(Kind) fieldModifier? $Property(Type) typeReference identifier (redefinitions | subsettings)? TSemicolon;
+fieldModifier 
+	: $Value(MetaPropertyKind.Containment) KContainment 
+	| $Value(MetaPropertyKind.Readonly) KReadonly 
+	| $Value(MetaPropertyKind.Lazy) KLazy 
+	| $Value(MetaPropertyKind.Derived) KDerived
+	| $Value(MetaPropertyKind.Synthetized) KSynthetized
+	| $Value(MetaPropertyKind.Inherited) KInherited
+	;
+
+redefinitions : KRedefines $Property(RedefinedProperties) nameUseList?;
+subsettings : KSubsets $Property(SubsettedProperties) nameUseList?;
+
+nameUseList : $NameUse(MetaProperty) qualifiedName (TComma qualifiedName)*;
+
+$Property(Declarations) 
+$NameDef(MetaConstant)
+$Trivia(Documentation)
+constDeclaration : KConst $Property(Type) typeReference identifier (TAssign $Property(Value) expressionOrNewExpression)? TSemicolon;
+
+$Property(Declarations) 
+$NameDef(symbolType=MetaGlobalFunction,overload=true)
+$Trivia(Documentation)
+functionDeclaration : annotation* KExtern $Property(ReturnType) returnType identifier TOpenParen $Property(Parameters) parameterList? TCloseParen TSemicolon;
+
+$TypeUse
+returnType : typeReference | voidType;
+$TypeUse
+typeOfReference : invisibleType | typeReference;
+$TypeUse
+typeReference : collectionType | simpleType;
+$TypeUse
+simpleType : primitiveType | objectType | nullableType | qualifiedName;
+$TypeUse(MetaClass)
+classType : qualifiedName;
+
+$Name
+objectType 
+	: KObject 
+	| KString
+	;
+$Name
+primitiveType 
+	: KInt 
+	| KLong 
+	| KFloat 
+	| KDouble 
+	| KByte 
+	| KBool
+	;
+$Name
+voidType 
+	: KVoid
+	;
+
+invisibleType
+	: $PreDefSymbol(MetaInstance.Any) KAny
+	| $PreDefSymbol(MetaInstance.None) KNone
+	| $PreDefSymbol(MetaInstance.Error) KError
+	;
+
+$TypeCtr(MetaNullableType)
+nullableType : $Property(InnerType) primitiveType TQuestion;
+
+$TypeCtr(MetaCollectionType)
+collectionType : $Property(Kind) collectionKind TLessThan $Property(InnerType) simpleType TGreaterThan;
+collectionKind 
+	: $Value(MetaCollectionKind.Set) KSet 
+	| $Value(MetaCollectionKind.List) KList
+	| $Value(MetaCollectionKind.MultiSet) KMultiSet 
+	| $Value(MetaCollectionKind.MultiList) KMultiList
+	;
+
+$NameDef(MetaOperation)
+$Trivia(Documentation)
+operationDeclaration : annotation* KStatic? $Property(ReturnType) returnType identifier TOpenParen $Property(Parameters) parameterList? TCloseParen TSemicolon;
+parameterList : parameter (TComma parameter)*;
+
+$NameDef(MetaParameter)
+$Trivia(Documentation)
+parameter : annotation* $Property(Type) typeReference identifier /*(TAssign expression)? { expression.ExpectedType = typeReference; }*/;
+
+$NameDef(MetaConstructor)
+$Trivia(Documentation)
+constructorDeclaration : annotation* identifier TOpenParen TCloseParen TOpenBrace $Property(Initializers) initializerDeclaration* TCloseBrace;
+
+initializerDeclaration 
+	: synthetizedPropertyInitializer
+	| inheritedPropertyInitializer
+	;
+
+$Symbol(MetaSynthetizedPropertyInitializer)
+synthetizedPropertyInitializer
+	: (KThis TDot)? (TOpenBracket $Property(PropertyContext) $TypeUse(MetaClass) qualifiedName TCloseBracket)? $Property(PropertyName) $Value property=identifier TAssign $Property(Value) expression TSemicolon;
+
+$Symbol(MetaInheritedPropertyInitializer)
+inheritedPropertyInitializer
+	: (KThis TDot)? $Property(ObjectName) $Value object=identifier TDot (TOpenBracket $Property(PropertyContext) $TypeUse(MetaClass) qualifiedName TCloseBracket)? $Property(PropertyName) $Value property=identifier TAssign $Property(Value) expression TSemicolon;
+
+expressionList : expression (',' expression)*;
+
+expressionOrNewExpressionList : expressionOrNewExpression (',' expressionOrNewExpression)*;
+expressionOrNewExpression : expression | newExpression;
+
+$Symbol
+$AutoProperty
+$Expression
+expression 
+	: TOpenParen typeReference TCloseParen expression #castExpression $SymbolType(MetaTypeCastExpression)
+    | KTypeof TOpenParen $Property(TypeReference) typeOfReference TCloseParen #typeofExpression $SymbolType(MetaTypeOfExpression)
+	| TOpenParen expression TCloseParen #bracketExpression $SymbolType(MetaBracketExpression)
+	| KThis #thisExpression $SymbolType(MetaThisExpression)
+	| value=literalExpression #constantExpression $SymbolType(MetaConstantExpression)
+	| $Value name=identifier #identifierExpression $SymbolType(MetaIdentifierExpression)
+    | expression TOpenBracket $Property(Arguments) expressionList TCloseBracket #indexerExpression $SymbolType(MetaIndexerExpression)
+    | expression TOpenParen $Property(Arguments) expressionList? TCloseParen #functionCallExpression $SymbolType(MetaFunctionCallExpression)
+    | expression TDot $Value name=identifier #memberAccessExpression $SymbolType(MetaMemberAccessExpression)
+    | expression kind=postOperator #postExpression 
+    | kind=preOperator expression #preExpression 
+    | kind=unaryOperator expression #unaryExpression 
+    | expression KAs typeReference #typeConversionExpression $SymbolType(MetaTypeAsExpression)
+    | expression KIs typeReference #typeCheckExpression $SymbolType(MetaTypeCheckExpression)
+    | left=expression kind=multiplicativeOperator right=expression #multiplicativeExpression
+    | left=expression kind=additiveOperator right=expression #additiveExpression
+    | left=expression kind=shiftOperator right=expression #shiftExpression
+    | left=expression kind=comparisonOperator right=expression #comparisonExpression
+    | left=expression kind=equalityOperator right=expression #equalityExpression
+    | left=expression TAmpersand right=expression #bitwiseAndExpression $SymbolType(MetaAndExpression)
+    | left=expression THat right=expression #bitwiseXorExpression $SymbolType(MetaExclusiveOrExpression)
+    | left=expression TBar right=expression #bitwiseOrExpression $SymbolType(MetaOrExpression)
+    | left=expression TAndAlso right=expression #logicalAndExpression $SymbolType(MetaAndAlsoExpression)
+    | left=expression TOrElse right=expression #logicalOrExpression $SymbolType(MetaOrElseExpression)
+    | left=expression TQuestionQuestion right=expression #nullCoalescingExpression $SymbolType(MetaNullCoalescingExpression)
+    | condition=expression TQuestion thenExpr=expression TColon elseExpr=expression #conditionalExpression $SymbolType(MetaConditionalExpression)
+    | left=expression operator=assignmentOperator right=expression #assignmentExpression 
+	;
+
+literalExpression 
+    : $Symbol(MetaNullExpression) nullLiteral
+	| $Value booleanLiteral
+	| $Value integerLiteral
+	| $Value decimalLiteral
+	| $Value scientificLiteral
+    | $Value stringLiteral
+	;
+
+$Symbol
+$AutoProperty
+$Expression
+newExpression 
+	: KNew $Property(TypeReference) classType TOpenParen TCloseParen (TOpenBrace newPropertyInitList? TCloseBrace)? #newObjectExpression $SymbolType(MetaNewExpression)
+	| KNew $Property(TypeReference) collectionType TOpenParen TCloseParen (TOpenBrace $Property(Values) expressionOrNewExpression? TCloseBrace)? #newCollectionExpression $SymbolType(MetaNewCollectionExpression)
+	;
+
+newPropertyInitList : newPropertyInit (TComma newPropertyInit)* TComma?;
+
+$Property(PropertyInitializers)
+$Symbol(MetaNewPropertyInitializer)
+newPropertyInit : $Property(PropertyName) $Value identifier TAssign $Property(Value) expressionOrNewExpression;
+
+postOperator
+	: $SymbolType(MetaPostIncrementAssignExpression) TPlusPlus
+	| $SymbolType(MetaPostDecrementAssignExpression) TMinusMinus
+	;
+
+preOperator
+	: $SymbolType(MetaPreIncrementAssignExpression) TPlusPlus
+	| $SymbolType(MetaPreDecrementAssignExpression) TMinusMinus
+	;
+
+unaryOperator
+	: $SymbolType(MetaUnaryPlusExpression) TPlus
+	| $SymbolType(MetaNegateExpression) TMinus
+	| $SymbolType(MetaOnesComplementExpression) TTilde
+	| $SymbolType(MetaNotExpression) TExclamation
+	;
+
+multiplicativeOperator
+	: $SymbolType(MetaMultiplyExpression) TAsterisk
+	| $SymbolType(MetaDivideExpression) TSlash
+	| $SymbolType(MetaModuloExpression) TPercent
+	;
+
+additiveOperator
+	: $SymbolType(MetaAddExpression) TPlus
+	| $SymbolType(MetaSubtractExpression) TMinus
+	;
+
+shiftOperator
+	: $SymbolType(MetaLeftShiftExpression) TLessThan TLessThan
+	| $SymbolType(MetaRightShiftExpression) TGreaterThan TGreaterThan
+	;
+
+comparisonOperator
+	: $SymbolType(MetaLessThanExpression) TLessThan
+	| $SymbolType(MetaGreaterThanExpression) TGreaterThan
+	| $SymbolType(MetaLessThanOrEqualExpression) TLessThanOrEqual
+	| $SymbolType(MetaGreaterThanOrEqualExpression) TGreaterThanOrEqual
+	;
+
+equalityOperator
+	: $SymbolType(MetaEqualExpression) TEqual
+	| $SymbolType(MetaNotEqualExpression) TNotEqual
+	;
+
+assignmentOperator
+	: $SymbolType(MetaAssignExpression) TAssign  
+	| $SymbolType(MetaMultiplyAssignExpression) TAsteriskAssign 
+	| $SymbolType(MetaDivideAssignExpression) TSlashAssign
+	| $SymbolType(MetaModuloAssignExpression) TPercentAssign
+	| $SymbolType(MetaAddAssignExpression) TPlusAssign
+	| $SymbolType(MetaSubtractAssignExpression) TMinusAssign
+	| $SymbolType(MetaLeftShiftAssignExpression) TLeftShiftAssign
+	| $SymbolType(MetaRightShiftAssignExpression) TRightShiftAssign
+	| $SymbolType(MetaAndAssignExpression) TAmpersandAssign
+	| $SymbolType(MetaExclusiveOrAssignExpression) THatAssign
+	| $SymbolType(MetaOrAssignExpression) TBarAssign
+	;
+
+associationDeclaration : annotation* KAssociation $NameUse(MetaProperty) source=qualifiedName KWith $NameUse(MetaProperty) target=qualifiedName TSemicolon 
+	-> { source.OppositeProperties = target; }
+	;
+
+
+// Additional rules for lexer:
+
+// Identifiers
+$Name
+$Identifier
+identifier : IdentifierNormal | IdentifierVerbatim;
+//identifier : IdentifierGeneral | IdentifierVerbatim;
+
+// Literals
+literal 
+    : $Value nullLiteral
+	| $Value booleanLiteral
+	| $Value integerLiteral
+	| $Value decimalLiteral
+	| $Value scientificLiteral
+    | $Value stringLiteral
+	;
+
+// Null literal
+nullLiteral : KNull;
+
+// Boolean literals
+booleanLiteral : KTrue | KFalse;
+
+// Number literals
+integerLiteral : IntegerLiteral;
+decimalLiteral : DecimalLiteral;
+scientificLiteral : ScientificLiteral;
+
+// String literals
+stringLiteral : RegularStringLiteral;
+
+
+/*
+
+ | DoubleQuoteVerbatimStringLiteral | SingleQuoteVerbatimStringLiteral
+
+// Date and time literals  
+dateOrTimeLiteral 
+    : dateTimeLiteral | dateTimeOffsetLiteral | dateLiteral | timeLiteral;
+dateTimeOffsetLiteral : DateTimeOffsetLiteral;
+dateTimeLiteral : DateTimeLiteral;
+dateLiteral : DateLiteral;
+timeLiteral : TimeLiteral;
+
+// Guid literal
+guidLiteral : GuidLiteral;
+
+$Symbol(MetaClass)
+$TypeDef
+classDeclaration : $Property(IsAbstract) $Value(true) KAbstract? KClass $NameDef identifier $Property(TypeParams) genericTypeParams? (TColon $Property(SuperClasses) classAncestors)? TOpenBrace classMemberDeclaration* TCloseBrace;
+
+genericTypeParams : LT genericTypeParam (COMMA genericTypeParam)* GT;
+
+$Symbol(MetaTypeParam)
+$TypeParam
+genericTypeParam : identifier;
+
+*/

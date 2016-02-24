@@ -1,4 +1,4 @@
-﻿/** A parser grammar for ANTLR v4 annotated grammar properties */
+/** A parser grammar for ANTLR v4 annotated grammar properties */
 parser grammar AnnotatedAntlr4PropertiesParser;
 
 options {
@@ -49,4 +49,5 @@ identifier : ID;
 booleanLiteral : TRUE | FALSE;
 
 nullLiteral : NULL;
+
 

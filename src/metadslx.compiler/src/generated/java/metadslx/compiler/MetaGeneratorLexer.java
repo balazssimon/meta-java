@@ -263,7 +263,7 @@ public class MetaGeneratorLexer extends Lexer {
 	private void KTemplate_action(RuleContext _localctx, int actionIndex) {
 		switch (actionIndex) {
 		case 0:
-			mode(TEMPLATE_HEADER); _templateParenthesis=0;
+			_mode=TEMPLATE_HEADER; _templateParenthesis=0;
 			break;
 		}
 	}
@@ -291,14 +291,14 @@ public class MetaGeneratorLexer extends Lexer {
 	private void TH_TCloseParenthesis_action(RuleContext _localctx, int actionIndex) {
 		switch (actionIndex) {
 		case 4:
-			_type=TCloseParenthesis; _templateParenthesis--; if(_templateParenthesis == 0) mode(TEMPLATE_OUTPUT); 
+			_type=TCloseParenthesis; _templateParenthesis--; if(_templateParenthesis == 0) _mode=TEMPLATE_OUTPUT; 
 			break;
 		}
 	}
 	private void TemplateStatementStart_action(RuleContext _localctx, int actionIndex) {
 		switch (actionIndex) {
 		case 5:
-			mode(TEMPLATE_STATEMENT); _templateBrackets=0;
+			_mode=TEMPLATE_STATEMENT; _templateBrackets=0;
 			break;
 		}
 	}
