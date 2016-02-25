@@ -325,7 +325,7 @@ public abstract class ModelObject {
 	}
 
 	void mOnAddValue(ModelProperty property, Object value, boolean firstCall, AddRemoveDirection addRemoveDir) {
-		if (this.nameProperty == null && property.isMetaName()) {
+		if (this.nameProperty == null && MetaExtensions.isMetaName(property)) {
 			this.nameProperty = property;
 		}
 		boolean added = false;

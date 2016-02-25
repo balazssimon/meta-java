@@ -19,7 +19,7 @@ public class DefaultNameProvider implements INameProvider {
 	public String getNameOf(ModelObject symbol) {
 		if (symbol == null) return null;
 		for (ModelProperty prop: symbol.mGetAllProperties()) {
-			if (prop.isMetaName()) {
+			if (MetaExtensions.isMetaName(prop)) {
 				Object value = symbol.mGet(prop);
 				if (value == null) return null;
 				else return value.toString();

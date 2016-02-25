@@ -21,7 +21,6 @@ public class ModelProperty {
 	}
 
 	private String name;
-	private boolean isMetaName;
 	private String declaredName;
 	private Class type;
 	private Class owningType;
@@ -162,7 +161,6 @@ public class ModelProperty {
 				if (Collection.class.isAssignableFrom(this.type)) {
 					this.isCollection = true;
 				}
-				this.isMetaName = info.getAnnotation(Name.class) != null;
 				for (Opposite annot: info.getAnnotationsByType(Opposite.class)) {
 					ModelProperty modelProperty = ModelProperty.find(annot.declaringType(), annot.propertyName());
 					if (modelProperty != null) {
@@ -308,10 +306,6 @@ public class ModelProperty {
 		} else {
 			return this.owningType.getCanonicalName()+"."+this.name;
 		}
-	}
-	
-	public boolean isMetaName() {
-		return this.isMetaName;
 	}
 	
 	private static class PropertyCache {
