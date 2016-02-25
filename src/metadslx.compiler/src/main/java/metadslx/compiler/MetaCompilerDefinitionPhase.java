@@ -142,8 +142,6 @@ public class MetaCompilerDefinitionPhase extends MetaCompilerPhase {
         if (na == null && qna == null) return;
         TypeDefAnnotation tda = this.getAnnotationFor(this.currentNameKind(), TypeDefAnnotation.class);
         NameDefAnnotation nda = this.getAnnotationFor(this.currentNameKind(), NameDefAnnotation.class);
-        TypeUseAnnotation tua = this.getAnnotationFor(this.currentNameKind(), TypeUseAnnotation.class);
-        NameUseAnnotation nua = this.getAnnotationFor(this.currentNameKind(), NameUseAnnotation.class);
         PropertyAnnotation pa = this.getAnnotationFor(this.currentNameKind(), PropertyAnnotation.class);
         if (tda != null)
         {
@@ -250,7 +248,7 @@ public class MetaCompilerDefinitionPhase extends MetaCompilerPhase {
         return nameDef;
     }
 
-    protected ModelObject createSymbol(ParseTree node, Class symbolType)
+    protected ModelObject createSymbol(ParseTree node, Class<?> symbolType)
     {
         if (symbolType == null) return null;
         ModelObject symbol = (ModelObject)this.getModelFactory().create(symbolType);

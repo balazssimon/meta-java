@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaSubtractAssignExpressionImpl extends metadslx.core.ModelObject implements metadslx.core.MetaSubtractAssignExpression {
     static {
         metadslx.core.MetaDescriptor.staticInit();

@@ -5,17 +5,17 @@ import java.util.ArrayList;
 public class ResolutionInfo {
 	private Object node;
 	private int position;
-	private ArrayList<Class> symbolTypes;
+	private ArrayList<Class<?>> symbolTypes;
 	
 	public ResolutionInfo() {
 		this.position = -1;
 	}
 
-	public ResolutionInfo(Object node, int position, Iterable<Class> symbolTypes) {
+	public ResolutionInfo(Object node, int position, Iterable<Class<?>> symbolTypes) {
 		this.node = node;
 		this.position = position;
 		this.symbolTypes = new ArrayList<>();
-		for (Class symbolType: symbolTypes) {
+		for (Class<?> symbolType: symbolTypes) {
 			this.symbolTypes.add(symbolType);
 		}
 	}
@@ -36,7 +36,7 @@ public class ResolutionInfo {
 		this.position = position;
 	}
 
-	public ArrayList<Class> getSymbolTypes() {
+	public ArrayList<Class<?>> getSymbolTypes() {
 		return symbolTypes;
 	}
 }

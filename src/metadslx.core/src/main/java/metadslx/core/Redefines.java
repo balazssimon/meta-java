@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Repeatable(RedefinesList.class)
 public @interface Redefines {
-	public Class declaringType();
+	public Class<?> declaringType();
 	public String propertyName();
 }

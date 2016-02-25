@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaIndexerExpressionImpl extends metadslx.core.ModelObject implements metadslx.core.MetaIndexerExpression {
     static {
         metadslx.core.MetaDescriptor.staticInit();

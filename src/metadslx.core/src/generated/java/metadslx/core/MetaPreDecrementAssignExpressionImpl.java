@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaPreDecrementAssignExpressionImpl extends metadslx.core.ModelObject implements metadslx.core.MetaPreDecrementAssignExpression {
     static {
         metadslx.core.MetaDescriptor.staticInit();

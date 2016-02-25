@@ -59,7 +59,7 @@ public class ModelMultiSet<T> extends ModelCollection<T> implements Collection<T
 	}
 
 	@Override
-	public <T> T[] toArray(T[] a) {
+	public <U> U[] toArray(U[] a) {
 		this.mFlushLazyItems();
 		return this.items.toArray(a);
 	}
@@ -144,6 +144,7 @@ public class ModelMultiSet<T> extends ModelCollection<T> implements Collection<T
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean mAdd(Object item, boolean firstCall) {
 		this.mFlushLazyItems();

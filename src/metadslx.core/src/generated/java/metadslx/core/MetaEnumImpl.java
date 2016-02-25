@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaEnumImpl extends metadslx.core.ModelObject implements metadslx.core.MetaEnum {
     static {
         metadslx.core.MetaDescriptor.staticInit();

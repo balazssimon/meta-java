@@ -3,6 +3,7 @@ package metadslx.compiler;
 import metadslx.core.Lazy;
 
 
+@SuppressWarnings("unused")
 class AnnotatedAntlr4ParserPropertyEvaluator extends MetaCompilerPropertyEvaluator implements AnnotatedAntlr4ParserVisitor<Object>
 {
     public AnnotatedAntlr4ParserPropertyEvaluator(MetaCompiler compiler)

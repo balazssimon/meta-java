@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaLessThanExpressionImpl extends metadslx.core.ModelObject implements metadslx.core.MetaLessThanExpression {
     static {
         metadslx.core.MetaDescriptor.staticInit();

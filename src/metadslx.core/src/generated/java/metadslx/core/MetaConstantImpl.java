@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaConstantImpl extends metadslx.core.ModelObject implements metadslx.core.MetaConstant {
     static {
         metadslx.core.MetaDescriptor.staticInit();

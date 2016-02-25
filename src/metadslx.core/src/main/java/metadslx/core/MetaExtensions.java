@@ -12,7 +12,7 @@ public class MetaExtensions {
         return false;
     }
 
-    public static boolean isMetaScope(Class symbolType)
+    public static boolean isMetaScope(Class<?> symbolType)
     {
         if (symbolType == null) return false;
         return symbolType.getAnnotationsByType(Scope.class).length > 0;
@@ -29,7 +29,7 @@ public class MetaExtensions {
         return false;
     }
 
-    public static boolean isMetaType(Class symbolType)
+    public static boolean isMetaType(Class<?> symbolType)
     {
         if (symbolType == null) return false;
         return symbolType.getAnnotationsByType(Type.class).length > 0;

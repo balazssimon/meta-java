@@ -9732,6 +9732,7 @@ public final class MetaInstance
 		init1();
 		init2();
 		init3();
+		init4();
 	}
 }
 

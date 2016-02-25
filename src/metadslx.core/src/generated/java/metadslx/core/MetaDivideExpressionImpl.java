@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaDivideExpressionImpl extends metadslx.core.ModelObject implements metadslx.core.MetaDivideExpression {
     static {
         metadslx.core.MetaDescriptor.staticInit();

@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaFunctionCallExpressionImpl extends metadslx.core.ModelObject implements metadslx.core.MetaFunctionCallExpression {
     static {
         metadslx.core.MetaDescriptor.staticInit();

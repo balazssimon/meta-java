@@ -5,14 +5,14 @@ import java.util.List;
 
 public class PropertyAnnotation
 {
-    private List<Class> symbolTypes;
+    private List<Class<?>> symbolTypes;
     private String name;
     private Object value;
     private boolean hasValue;
 
     public PropertyAnnotation()
     {
-        this.symbolTypes = new ArrayList<Class>();
+        this.symbolTypes = new ArrayList<>();
     }
 
 	public String getName() {
@@ -40,7 +40,7 @@ public class PropertyAnnotation
 		this.hasValue = hasValue;
 	}
 
-	public List<Class> getSymbolTypes() {
+	public List<Class<?>> getSymbolTypes() {
 		return symbolTypes;
 	}
     

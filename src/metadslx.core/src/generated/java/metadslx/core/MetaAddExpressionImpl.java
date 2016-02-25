@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaAddExpressionImpl extends metadslx.core.ModelObject implements metadslx.core.MetaAddExpression {
     static {
         metadslx.core.MetaDescriptor.staticInit();

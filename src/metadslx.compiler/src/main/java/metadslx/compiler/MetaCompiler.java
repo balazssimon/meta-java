@@ -45,7 +45,7 @@ public abstract class MetaCompiler implements IModelCompiler, IAntlr4Compiler {
 	private List<Object> parserAnnotations;
 	private Map<Integer, List<Object>> modeAnnotations;
 	private Map<Integer, List<Object>> tokenAnnotations;
-	private Map<Class, List<Object>> ruleAnnotations;
+	private Map<Class<?>, List<Object>> ruleAnnotations;
 	private Map<Object, List<Object>> treeAnnotations;
 
 	public MetaCompiler(String source, String fileName) {
@@ -198,11 +198,11 @@ public abstract class MetaCompiler implements IModelCompiler, IAntlr4Compiler {
 		this.tokenAnnotations = tokenAnnotations;
 	}
 
-	public Map<Class, List<Object>> getRuleAnnotations() {
+	public Map<Class<?>, List<Object>> getRuleAnnotations() {
 		return ruleAnnotations;
 	}
 
-	protected void setRuleAnnotations(Map<Class, List<Object>> ruleAnnotations) {
+	protected void setRuleAnnotations(Map<Class<?>, List<Object>> ruleAnnotations) {
 		this.ruleAnnotations = ruleAnnotations;
 	}
 

@@ -186,10 +186,10 @@ public class ModelProperty {
 						modelProperty.cachedRedefiningProperties = null;
 					}
 				}
-				for (Readonly annot: info.getAnnotationsByType(Readonly.class)) {
+				if (info.getAnnotationsByType(Readonly.class).length > 0) {
 					this.isReadonly = true;
 				}
-				for (Containment annot: info.getAnnotationsByType(Containment.class)) {
+				if (info.getAnnotationsByType(Containment.class).length > 0) {
 					this.isContainment = true;
 				}
 			}
@@ -239,7 +239,6 @@ public class ModelProperty {
 			propertyCache = new PropertyCache();
 			ModelProperty.cachedProperties.put(type, propertyCache);
 			HashSet<ModelProperty> allProperties = new HashSet<ModelProperty>();
-			HashSet<ModelProperty> distinctProperties = new HashSet<ModelProperty>();
 			HashMap<String, ModelProperty> propertyList = ModelProperty.properties.get(type);
 			if (propertyList != null) {
 				propertyCache.getDeclaredProperties().addAll(propertyList.values());

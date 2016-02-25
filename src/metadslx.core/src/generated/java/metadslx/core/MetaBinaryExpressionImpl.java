@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaBinaryExpressionImpl extends metadslx.core.ModelObject implements metadslx.core.MetaBinaryExpression {
     static {
         metadslx.core.MetaDescriptor.staticInit();

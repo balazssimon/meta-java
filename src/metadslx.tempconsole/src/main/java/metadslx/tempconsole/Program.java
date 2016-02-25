@@ -6,7 +6,6 @@ import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import metadslx.compiler.AnnotatedAntlr4Compiler;
@@ -34,6 +33,7 @@ public class Program {
 				Object value = mo.mGet(nameProp);
 				System.out.println(mo+": "+value);
 			}*/
+			compileGenerator("src/main/java/metadslx/tempconsole/GenTest.mgen", "src/main/java/metadslx/tempconsole/GenTest.java");
 			/*compileGenerator("src/main/java/metadslx/tempconsole/GenTest.mgen", "src/main/java/metadslx/tempconsole/GenTest.java");
 			ArrayList<String> sl = new ArrayList<>();
 			sl.add("AAA");
@@ -47,14 +47,14 @@ public class Program {
 			pl.add(new Student("UUU", "RST456", 50));
 			GenTest gt = new GenTest(pl);
 			System.out.println(gt.generate());*/
-			compileAG4("../metadslx.compiler/src/main", "../metadslx.compiler/src/generated", "AnnotatedAntlr4Lexer");
+			/*compileAG4("../metadslx.compiler/src/main", "../metadslx.compiler/src/generated", "AnnotatedAntlr4Lexer");
 			compileAG4("../metadslx.compiler/src/main", "../metadslx.compiler/src/generated", "AnnotatedAntlr4Parser");
 			compileAG4("../metadslx.compiler/src/main", "../metadslx.compiler/src/generated", "AnnotatedAntlr4PropertiesLexer");
 			compileAG4("../metadslx.compiler/src/main", "../metadslx.compiler/src/generated", "AnnotatedAntlr4PropertiesParser");
 			compileAG4("../metadslx.compiler/src/main", "../metadslx.compiler/src/generated", "MetaGeneratorLexer");
 			compileAG4("../metadslx.compiler/src/main", "../metadslx.compiler/src/generated", "MetaGeneratorParser");
 			compileAG4("../metadslx.compiler/src/main", "../metadslx.compiler/src/generated", "MetaModelLexer");
-			compileAG4("../metadslx.compiler/src/main", "../metadslx.compiler/src/generated", "MetaModelParser");
+			compileAG4("../metadslx.compiler/src/main", "../metadslx.compiler/src/generated", "MetaModelParser");*/
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

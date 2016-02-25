@@ -12,18 +12,19 @@ import metadslx.core.IModelCompiler;
 import metadslx.core.ModelCompilerContext;
 import metadslx.compiler.*;
 
+@SuppressWarnings("unused")
 public class AnnotatedAntlr4ParserAnnotator extends AnnotatedAntlr4ParserBaseVisitor<Object>
 {
     private AnnotatedAntlr4LexerAnnotator lexerAnnotator = new AnnotatedAntlr4LexerAnnotator();
     private List<Object> grammarAnnotations = new ArrayList<>();
-    private Map<Class, List<Object>> ruleAnnotations = new HashMap<>();
+    private Map<Class<?>, List<Object>> ruleAnnotations = new HashMap<>();
     private Map<Object, List<Object>> treeAnnotations = new HashMap<>();
     
     public List<Object> getParserAnnotations() { return this.grammarAnnotations; }
     public List<Object> getLexerAnnotations() { return this.lexerAnnotator.getLexerAnnotations(); }
     public Map<Integer, List<Object>> getTokenAnnotations() { return this.lexerAnnotator.getTokenAnnotations(); }
     public Map<Integer, List<Object>> getModeAnnotations() { return this.lexerAnnotator.getModeAnnotations(); }
-    public Map<Class, List<Object>> getRuleAnnotations() { return this.ruleAnnotations; }
+    public Map<Class<?>, List<Object>> getRuleAnnotations() { return this.ruleAnnotations; }
     public Map<Object, List<Object>> getTreeAnnotations() { return this.treeAnnotations; }
     
     
@@ -69,7 +70,7 @@ public class AnnotatedAntlr4ParserAnnotator extends AnnotatedAntlr4ParserBaseVis
         }
     }
     
-    private void overrideSymbolType(ParseTree node, Class symbolType)
+    private void overrideSymbolType(ParseTree node, Class<?> symbolType)
     {
         if (node == null) return;
         if (symbolType == null) return;

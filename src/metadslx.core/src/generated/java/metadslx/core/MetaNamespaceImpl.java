@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaNamespaceImpl extends metadslx.core.ModelObject implements metadslx.core.MetaNamespace {
     static {
         metadslx.core.MetaDescriptor.staticInit();

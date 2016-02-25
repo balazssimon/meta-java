@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaMemberAccessExpressionImpl extends metadslx.core.ModelObject implements metadslx.core.MetaMemberAccessExpression {
     static {
         metadslx.core.MetaDescriptor.staticInit();

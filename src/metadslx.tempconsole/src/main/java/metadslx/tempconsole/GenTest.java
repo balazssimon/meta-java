@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
+@SuppressWarnings("unused")
 public class GenTest { //3:1
     private ArrayList<Program.Person> Instances; //3:1
 

@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaGreaterThanExpressionImpl extends metadslx.core.ModelObject implements metadslx.core.MetaGreaterThanExpression {
     static {
         metadslx.core.MetaDescriptor.staticInit();

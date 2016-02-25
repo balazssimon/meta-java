@@ -53,7 +53,7 @@ public class ModelMultiList<T> extends ModelCollection<T> implements List<T> {
 	}
 
 	@Override
-	public <T> T[] toArray(T[] a) {
+	public <U> U[] toArray(U[] a) {
 		this.mFlushLazyItems();
 		return this.items.toArray(a);
 	}
@@ -216,6 +216,7 @@ public class ModelMultiList<T> extends ModelCollection<T> implements List<T> {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean mAdd(Object item, boolean firstCall) {
 		this.mFlushLazyItems();

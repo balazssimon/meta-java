@@ -6,6 +6,7 @@ import metadslx.core.Lazy;
 import metadslx.core.*;
 
 
+@SuppressWarnings("unused")
 class MetaModelParserPropertyEvaluator extends MetaCompilerPropertyEvaluator implements MetaModelParserVisitor<Object>
 {
     public MetaModelParserPropertyEvaluator(MetaCompiler compiler)

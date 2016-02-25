@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaGreaterThanOrEqualExpressionImpl extends metadslx.core.ModelObject implements metadslx.core.MetaGreaterThanOrEqualExpression {
     static {
         metadslx.core.MetaDescriptor.staticInit();

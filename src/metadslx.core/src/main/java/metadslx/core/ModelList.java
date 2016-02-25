@@ -2,7 +2,6 @@ package metadslx.core;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -54,7 +53,7 @@ public class ModelList<T> extends ModelCollection<T> implements List<T> {
 	}
 
 	@Override
-	public <T> T[] toArray(T[] a) {
+	public <U> U[] toArray(U[] a) {
 		this.mFlushLazyItems();
 		return this.items.toArray(a);
 	}
@@ -238,6 +237,7 @@ public class ModelList<T> extends ModelCollection<T> implements List<T> {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean mAdd(Object item, boolean firstCall) {
 		this.mFlushLazyItems();

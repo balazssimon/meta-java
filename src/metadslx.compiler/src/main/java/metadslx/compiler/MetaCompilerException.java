@@ -1,6 +1,8 @@
 package metadslx.compiler;
 
 public class MetaCompilerException extends RuntimeException {
+	private static final long serialVersionUID = 1L;
+
 	public MetaCompilerException() {
 	}
 

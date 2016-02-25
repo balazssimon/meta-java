@@ -6,7 +6,7 @@ public class ValueAnnotation
     private boolean hasName;
     private Object value;
     private boolean hasValue;
-    private Class type;
+    private Class<?> type;
     private boolean hasType;
 	public String getName() {
 		return name;
@@ -36,10 +36,10 @@ public class ValueAnnotation
 		this.hasValue = hasValue;
 	}
 
-	public Class getType() {
+	public Class<?> getType() {
 		return type;
 	}
-	public void setType(Class type) {
+	public void setType(Class<?> type) {
 		this.type = type;
 		this.hasType = true;
 	}

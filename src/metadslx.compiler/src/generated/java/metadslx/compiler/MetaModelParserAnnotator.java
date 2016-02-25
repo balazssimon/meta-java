@@ -15,18 +15,19 @@ import metadslx.compiler.*;
 
 import metadslx.core.*;
 
+@SuppressWarnings("unused")
 public class MetaModelParserAnnotator extends MetaModelParserBaseVisitor<Object>
 {
     private MetaModelLexerAnnotator lexerAnnotator = new MetaModelLexerAnnotator();
     private List<Object> grammarAnnotations = new ArrayList<>();
-    private Map<Class, List<Object>> ruleAnnotations = new HashMap<>();
+    private Map<Class<?>, List<Object>> ruleAnnotations = new HashMap<>();
     private Map<Object, List<Object>> treeAnnotations = new HashMap<>();
     
     public List<Object> getParserAnnotations() { return this.grammarAnnotations; }
     public List<Object> getLexerAnnotations() { return this.lexerAnnotator.getLexerAnnotations(); }
     public Map<Integer, List<Object>> getTokenAnnotations() { return this.lexerAnnotator.getTokenAnnotations(); }
     public Map<Integer, List<Object>> getModeAnnotations() { return this.lexerAnnotator.getModeAnnotations(); }
-    public Map<Class, List<Object>> getRuleAnnotations() { return this.ruleAnnotations; }
+    public Map<Class<?>, List<Object>> getRuleAnnotations() { return this.ruleAnnotations; }
     public Map<Object, List<Object>> getTreeAnnotations() { return this.treeAnnotations; }
     
     
@@ -72,7 +73,7 @@ public class MetaModelParserAnnotator extends MetaModelParserBaseVisitor<Object>
         }
     }
     
-    private void overrideSymbolType(ParseTree node, Class symbolType)
+    private void overrideSymbolType(ParseTree node, Class<?> symbolType)
     {
         if (node == null) return;
         if (symbolType == null) return;

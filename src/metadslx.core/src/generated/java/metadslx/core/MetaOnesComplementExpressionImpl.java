@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaOnesComplementExpressionImpl extends metadslx.core.ModelObject implements metadslx.core.MetaOnesComplementExpression {
     static {
         metadslx.core.MetaDescriptor.staticInit();

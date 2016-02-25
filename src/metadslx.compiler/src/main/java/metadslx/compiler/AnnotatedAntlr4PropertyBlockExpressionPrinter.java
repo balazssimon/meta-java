@@ -246,7 +246,7 @@ class AnnotatedAntlr4PropertyBlockExpressionPrinter extends AnnotatedAntlr4Prope
 				minI = 0;
 			}
 			for (int i = minI; i < propSels.size(); ++i) {
-				String propName = propSels.get(i).name.getText();
+				//String propName = propSels.get(i).name.getText();
 				output.write("this.getValue(");
 			}
 			if (minI >= propSels.size()) {

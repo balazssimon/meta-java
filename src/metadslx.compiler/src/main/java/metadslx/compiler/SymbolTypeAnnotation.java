@@ -3,7 +3,7 @@ package metadslx.compiler;
 public class SymbolTypeAnnotation {
 	private String name;
 	private boolean hasName;
-	private Class symbolType;
+	private Class<?> symbolType;
 
 	public String getName() {
 		return this.name;
@@ -22,11 +22,11 @@ public class SymbolTypeAnnotation {
 		this.hasName = hasName;
 	}
 
-	public Class getSymbolType() {
+	public Class<?> getSymbolType() {
 		return symbolType;
 	}
 
-	public void setSymbolType(Class symbolType) {
+	public void setSymbolType(Class<?> symbolType) {
 		this.symbolType = symbolType;
 	}
 }

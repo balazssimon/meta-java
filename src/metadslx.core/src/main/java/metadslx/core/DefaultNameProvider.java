@@ -87,14 +87,14 @@ public class DefaultNameProvider implements INameProvider {
 	public Iterable<TextSpan> getSymbolTextSpans(ModelObject symbol) {
 		ArrayList<TextSpan> result = new ArrayList<>();
 		Object nameTreeNodes = symbol.mGet(MetaScopeEntryProperties.NameTreeNodesProperty);
-		List<Object> nameTreeNodeList = (List<Object>)nameTreeNodes;
+		List<?> nameTreeNodeList = (List<?>)nameTreeNodes;
 		if (nameTreeNodeList != null && nameTreeNodeList.size() > 0) {
 			for (Object nameTreeNode: nameTreeNodeList) {
 				result.add(this.getTreeNodeTextSpan(nameTreeNode));
 			}
 		} else {
 			Object symbolTreeNodes = symbol.mGet(MetaScopeEntryProperties.SymbolTreeNodesProperty);
-			List<Object> symbolTreeNodeList = (List<Object>)symbolTreeNodes;
+			List<?> symbolTreeNodeList = (List<?>)symbolTreeNodes;
 			if (symbolTreeNodeList != null && symbolTreeNodeList.size() > 0) {
 				for (Object symbolTreeNode: symbolTreeNodeList) {
 					result.add(this.getTreeNodeTextSpan(symbolTreeNode));

@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Repeatable(OppositeList.class)
 public @interface Opposite {
-	public Class declaringType();
+	public Class<?> declaringType();
 	public String propertyName();
 }

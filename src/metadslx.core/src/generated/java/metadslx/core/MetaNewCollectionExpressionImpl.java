@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaNewCollectionExpressionImpl extends metadslx.core.ModelObject implements metadslx.core.MetaNewCollectionExpression {
     static {
         metadslx.core.MetaDescriptor.staticInit();

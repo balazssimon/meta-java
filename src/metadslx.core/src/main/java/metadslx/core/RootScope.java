@@ -2,6 +2,7 @@ package metadslx.core;
 
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 @Scope
 public class RootScope extends ModelObject {
 	public RootScope() {

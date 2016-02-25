@@ -3,6 +3,7 @@ package metadslx.compiler;
 import metadslx.core.Lazy;
 
 
+@SuppressWarnings("unused")
 class MetaGeneratorParserPropertyEvaluator extends MetaCompilerPropertyEvaluator implements MetaGeneratorParserVisitor<Object>
 {
     public MetaGeneratorParserPropertyEvaluator(MetaCompiler compiler)

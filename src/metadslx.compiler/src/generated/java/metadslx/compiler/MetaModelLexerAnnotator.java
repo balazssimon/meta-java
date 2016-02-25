@@ -12,6 +12,7 @@ import metadslx.core.IModelCompiler;
 import metadslx.core.ModelCompilerContext;
 import metadslx.compiler.*;
 
+@SuppressWarnings("unused")
 public class MetaModelLexerAnnotator
 {
     private List<Object> grammarAnnotations = new ArrayList<>();

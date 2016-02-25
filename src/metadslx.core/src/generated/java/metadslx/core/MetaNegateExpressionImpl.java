@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaNegateExpressionImpl extends metadslx.core.ModelObject implements metadslx.core.MetaNegateExpression {
     static {
         metadslx.core.MetaDescriptor.staticInit();

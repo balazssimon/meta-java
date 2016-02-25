@@ -20,10 +20,11 @@ public class ModelFactory {
     	return (ModelObject)this.create(type);
     }
     
-    public <T> T create(Class<T> type) {
+    @SuppressWarnings("unchecked")
+	public <T> T create(Class<T> type) {
     	if (type == null) return null;
     	String typeName = type.getName()+"Impl";
-    	Class implType;
+    	Class<?> implType;
 		try {
 			implType = this.getClass().getClassLoader().loadClass(typeName);
 		} catch (ClassNotFoundException e) {
@@ -52,7 +53,7 @@ public class ModelFactory {
     		if (!init.getProperty().isCollection()) {
     			mobject.mUnSet(init.getProperty());
     		} else {
-    			ModelCollection mc = (ModelCollection)mobject.mGet(init.getProperty());
+    			ModelCollection<?> mc = (ModelCollection<?>)mobject.mGet(init.getProperty());
     			if (mc != null) {
     				mc.clear();
     			}

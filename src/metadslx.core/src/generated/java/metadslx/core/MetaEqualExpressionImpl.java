@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaEqualExpressionImpl extends metadslx.core.ModelObject implements metadslx.core.MetaEqualExpression {
     static {
         metadslx.core.MetaDescriptor.staticInit();

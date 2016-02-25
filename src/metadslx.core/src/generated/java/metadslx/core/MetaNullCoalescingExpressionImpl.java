@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaNullCoalescingExpressionImpl extends metadslx.core.ModelObject implements metadslx.core.MetaNullCoalescingExpression {
     static {
         metadslx.core.MetaDescriptor.staticInit();

@@ -9,6 +9,7 @@ import metadslx.core.TextSpan;
 import metadslx.core.*;
 
 
+@SuppressWarnings("unused")
 public abstract class MetaModelCompilerBase extends MetaCompiler
 {
     public MetaModelCompilerBase(String source, String fileName)

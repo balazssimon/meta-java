@@ -167,7 +167,7 @@ public class Antlr4DefaultTriviaProvider extends DefaultTriviaProvider
             ModelObject mo = (ModelObject)node;
             Object treeNodesObj = mo.mGet(MetaScopeEntryProperties.SymbolTreeNodesProperty);
             if (treeNodesObj instanceof List<?>) {
-                List<Object> treeNodes = (List<Object>)treeNodesObj;
+                List<?> treeNodes = (List<?>)treeNodesObj;
 	            if (treeNodes.size() > 0)
 	            {
 	                StringBuilder builder = new StringBuilder();
@@ -209,7 +209,7 @@ public class Antlr4DefaultTriviaProvider extends DefaultTriviaProvider
             ModelObject mo = (ModelObject)node;
             Object treeNodesObj = mo.mGet(MetaScopeEntryProperties.SymbolTreeNodesProperty);
             if (treeNodesObj instanceof List<?>) {
-                List<Object> treeNodes = (List<Object>)treeNodesObj;
+                List<?> treeNodes = (List<?>)treeNodesObj;
 	            if (treeNodes.size() > 0)
 	            {
 	                StringBuilder builder = new StringBuilder();

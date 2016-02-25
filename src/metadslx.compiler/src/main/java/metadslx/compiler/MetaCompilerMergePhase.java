@@ -50,8 +50,6 @@ public class MetaCompilerMergePhase extends MetaCompilerPhase {
         if (na == null && qna == null) return;
         TypeDefAnnotation tda = this.getAnnotationFor(this.currentNameKind(), TypeDefAnnotation.class);
         NameDefAnnotation nda = this.getAnnotationFor(this.currentNameKind(), NameDefAnnotation.class);
-        TypeUseAnnotation tua = this.getAnnotationFor(this.currentNameKind(), TypeUseAnnotation.class);
-        NameUseAnnotation nua = this.getAnnotationFor(this.currentNameKind(), NameUseAnnotation.class);
         PropertyAnnotation pa = this.activeProperty();
         if (tda != null)
         {
@@ -115,7 +113,7 @@ public class MetaCompilerMergePhase extends MetaCompilerPhase {
                     Object existingEntries = parent.mGet(prop);
                     if (existingEntries instanceof Iterable<?>)
                     {
-                    	Iterable<Object> collection = (Iterable<Object>)existingEntries;
+                    	Iterable<?> collection = (Iterable<?>)existingEntries;
                         for (Object entry: collection)
                         {
                         	if (entry instanceof ModelObject) {

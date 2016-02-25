@@ -71,7 +71,7 @@ public abstract class ModelObject {
 		for (ModelProperty property : properties) {
 			Object value = this.mGet(property);
 			if (value instanceof ModelCollection) {
-				ModelCollection<Object> collection = (ModelCollection<Object>) value;
+				ModelCollection<?> collection = (ModelCollection<?>) value;
 				collection.mFlushLazyItems();
 			}
 		}
@@ -86,7 +86,7 @@ public abstract class ModelObject {
 		for (ModelProperty property : valueProperties) {
 			Object value = this.mGet(property);
 			if (value instanceof ModelCollection) {
-				ModelCollection collection = (ModelCollection) value;
+				ModelCollection<?> collection = (ModelCollection<?>) value;
 				if (collection.mHasLazyItems())
 					return true;
 			}
@@ -133,7 +133,7 @@ public abstract class ModelObject {
 		Object oldValue = this.values.get(property);
 		if (oldValue != null) {
 			if (property.isCollection() && oldValue instanceof ModelCollection) {
-				((ModelCollection<Object>) oldValue).clear();
+				((ModelCollection<?>) oldValue).clear();
 			} else {
 				this.mRemove(property, oldValue);
 			}
@@ -287,6 +287,7 @@ public abstract class ModelObject {
 		return result;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void mLazyAdd(ModelProperty property, Lazy<Object> value) {
 		if (property.isCollection() && !this.values.containsKey(property)) {
 			// Initializing lazy collection:
@@ -324,6 +325,7 @@ public abstract class ModelObject {
 		this.mOnRemoveValue(property, value, firstCall, AddRemoveDirection.None);
 	}
 
+	@SuppressWarnings("unchecked")
 	void mOnAddValue(ModelProperty property, Object value, boolean firstCall, AddRemoveDirection addRemoveDir) {
 		if (this.nameProperty == null && MetaExtensions.isMetaName(property)) {
 			this.nameProperty = property;
@@ -408,6 +410,7 @@ public abstract class ModelObject {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	void mOnRemoveValue(ModelProperty property, Object value, boolean firstCall, AddRemoveDirection addRemoveDir) {
 		boolean removed = false;
 		Object oldValue = this.mGet(property);
@@ -548,6 +551,7 @@ public abstract class ModelObject {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T extends ModelObject> T mFindObjectByID(String ID, Class<T> type) {
 		ModelObject obj = this.mFindObjectByID(ID);
 		if (type.isAssignableFrom(obj.getClass())) {
@@ -557,6 +561,7 @@ public abstract class ModelObject {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private <T extends ModelObject> Set<T> findAllObjects(Class<T> type) {
 		HashSet<T> result = new HashSet<T>();
 		if (type.isAssignableFrom(this.getClass())) {

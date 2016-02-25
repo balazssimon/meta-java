@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaAnnotatedElementImpl extends metadslx.core.ModelObject implements metadslx.core.MetaAnnotatedElement {
     static {
         metadslx.core.MetaDescriptor.staticInit();

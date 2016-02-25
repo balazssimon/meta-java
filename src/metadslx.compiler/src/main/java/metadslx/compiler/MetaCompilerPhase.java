@@ -418,7 +418,8 @@ public class MetaCompilerPhase {
     	return this.getAnnotationsFor(tree, Object.class);
     }
     
-    protected <T> List<T> getAnnotationsFor(ParseTree tree, Class<T> annotationType)
+    @SuppressWarnings("unchecked")
+	protected <T> List<T> getAnnotationsFor(ParseTree tree, Class<T> annotationType)
     {
         if (tree == null) return new ArrayList<T>();
         if (annotationType == null) return new ArrayList<T>();

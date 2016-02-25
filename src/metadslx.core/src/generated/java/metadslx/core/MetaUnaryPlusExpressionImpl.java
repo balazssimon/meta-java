@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaUnaryPlusExpressionImpl extends metadslx.core.ModelObject implements metadslx.core.MetaUnaryPlusExpression {
     static {
         metadslx.core.MetaDescriptor.staticInit();

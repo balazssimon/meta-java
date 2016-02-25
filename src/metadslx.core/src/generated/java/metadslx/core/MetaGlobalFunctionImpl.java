@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaGlobalFunctionImpl extends metadslx.core.ModelObject implements metadslx.core.MetaGlobalFunction {
     static {
         metadslx.core.MetaDescriptor.staticInit();

@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaLeftShiftExpressionImpl extends metadslx.core.ModelObject implements metadslx.core.MetaLeftShiftExpression {
     static {
         metadslx.core.MetaDescriptor.staticInit();

@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Repeatable(SubsetsList.class)
 public @interface Subsets {
-	public Class declaringType();
+	public Class<?> declaringType();
 	public String propertyName();
 }

@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaOrElseExpressionImpl extends metadslx.core.ModelObject implements metadslx.core.MetaOrElseExpression {
     static {
         metadslx.core.MetaDescriptor.staticInit();

@@ -175,6 +175,7 @@ class MetaGenJavaClassVisitor extends MetaGenVisitor {
 	@Override
 	public Object visitGeneratorDeclaration(GeneratorDeclarationContext ctx) {
 		appendLine();
+		writeLine("@SuppressWarnings(\"unused\")");
 		String name = ctx.identifier().getText();
 		writeLine("public class {0} {1} {2}", name, "{", toComment(ctx));
 		incIndent();
@@ -901,20 +902,6 @@ class MetaGenJavaClassVisitor extends MetaGenVisitor {
 		return null;
 	}
 
-	private String getFunctionCallName(TemplateStatementStartEndContext statementStartEnd) {
-		TemplateStatementContext statement = statementStartEnd.templateStatement();
-		if (statement != null && statement.expressionStatement() != null) {
-			ExpressionContext expression = statement.expressionStatement().expression();
-			if (expression instanceof FunctionCallExpressionContext) {
-				FunctionCallExpressionContext call = (FunctionCallExpressionContext) expression;
-				if (call.expression() instanceof IdentifierExpressionContext) {
-					return call.expression().getText();
-				}
-			}
-		}
-		return null;
-	}
-
 	private boolean isTemplateOutputExpression(TemplateStatementStartEndContext statementStartEnd) {
 		TemplateStatementContext statement = statementStartEnd.templateStatement();
 		if (statement != null && statement.expressionStatement() != null) {
@@ -939,14 +926,12 @@ class MetaGenJavaClassVisitor extends MetaGenVisitor {
 		boolean forceNewLine = this.forceNewLine(ctx);
 		boolean noNewLine = this.noNewLine(ctx);
 		int lastIndex = ctx.getChildCount() - 2;
-		int outputCount = 0;
 		int nonWhitespaceOutputCount = 0;
 		int outputExpressionCount = 0;
 		int statementCount = 0;
 		for (int i = 0; i <= lastIndex; ++i) {
 			ParseTree child = ctx.children.get(i);
 			if (child instanceof TemplateOutputContext) {
-				++outputCount;
 				TemplateOutputContext toc = (TemplateOutputContext) child;
 				if (toc.getText() != null && !toc.getText().trim().equals("")) {
 					++nonWhitespaceOutputCount;

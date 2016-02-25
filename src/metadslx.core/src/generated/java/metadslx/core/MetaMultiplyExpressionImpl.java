@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaMultiplyExpressionImpl extends metadslx.core.ModelObject implements metadslx.core.MetaMultiplyExpression {
     static {
         metadslx.core.MetaDescriptor.staticInit();

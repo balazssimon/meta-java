@@ -1,5 +1,6 @@
 package metadslx.core;
 
+@SuppressWarnings("unchecked")
 class MetaPostIncrementAssignExpressionImpl extends metadslx.core.ModelObject implements metadslx.core.MetaPostIncrementAssignExpression {
     static {
         metadslx.core.MetaDescriptor.staticInit();

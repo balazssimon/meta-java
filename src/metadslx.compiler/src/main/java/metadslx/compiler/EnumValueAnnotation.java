@@ -2,18 +2,18 @@ package metadslx.compiler;
 
 public class EnumValueAnnotation
 {
-    private Class enumType;
+    private Class<?> enumType;
     private EnumValueCase enumValueCase;
 
     public EnumValueAnnotation() {
         this.enumValueCase = EnumValueCase.Exact;
     }
 
-	public Class getEnumType() {
+	public Class<?> getEnumType() {
 		return enumType;
 	}
 
-	public void setEnumType(Class enumType) {
+	public void setEnumType(Class<?> enumType) {
 		this.enumType = enumType;
 	}
 

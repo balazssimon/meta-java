@@ -643,6 +643,7 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
 			}
 		}
 
+		writeLine("@SuppressWarnings(\"unused\")");
 		if (this.compiler.isParser()) {
 			writeLine("public class {0}Annotator extends {0}BaseVisitor<Object>", this.parserName);
 		} else {
@@ -1216,6 +1217,7 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
 			writeLine(this.lexerHeader);
 		}
 		writeLine();
+		writeLine("@SuppressWarnings(\"unused\")");
 		writeLine(
 				"class {0}PropertyEvaluator extends MetaCompilerPropertyEvaluator implements {0}Visitor<Object>",
 				this.parserName);
@@ -1329,6 +1331,7 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
 		} else {
 			rootName = "";
 		}
+		writeLine("@SuppressWarnings(\"unused\")");
 		if (this.generateCompilerBase) {
 			writeLine("public abstract class {0} extends MetaCompiler", name);
 		} else {
