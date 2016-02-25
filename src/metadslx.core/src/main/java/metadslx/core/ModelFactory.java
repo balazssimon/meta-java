@@ -11,7 +11,7 @@ public class ModelFactory {
     public ModelObject create(String name) {
     	if (name == null) return null;
     	String typeName = this.packageName+"."+name;
-    	Class type;
+    	Class<?> type;
 		try {
 			type = this.getClass().getClassLoader().loadClass(typeName);
 		} catch (ClassNotFoundException e) {

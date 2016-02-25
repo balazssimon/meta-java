@@ -10,21 +10,21 @@ import java.util.HashSet;
 import metadslx.core.MetaProperty;
 
 public class ModelProperty {
-	private static HashMap<Class, HashMap<String, ModelProperty>> declaredProperties;
-	private static HashMap<Class, HashMap<String, ModelProperty>> properties;
-	private static HashMap<Class, PropertyCache> cachedProperties;
+	private static HashMap<Class<?>, HashMap<String, ModelProperty>> declaredProperties;
+	private static HashMap<Class<?>, HashMap<String, ModelProperty>> properties;
+	private static HashMap<Class<?>, PropertyCache> cachedProperties;
 	
 	static {
-		ModelProperty.declaredProperties = new HashMap<Class, HashMap<String,ModelProperty>>();
-		ModelProperty.properties = new HashMap<Class, HashMap<String,ModelProperty>>();
-		ModelProperty.cachedProperties = new HashMap<Class, ModelProperty.PropertyCache>();
+		ModelProperty.declaredProperties = new HashMap<Class<?>, HashMap<String,ModelProperty>>();
+		ModelProperty.properties = new HashMap<Class<?>, HashMap<String,ModelProperty>>();
+		ModelProperty.cachedProperties = new HashMap<Class<?>, ModelProperty.PropertyCache>();
 	}
 
 	private String name;
 	private String declaredName;
-	private Class type;
-	private Class owningType;
-	private Class declaringType;
+	private Class<?> type;
+	private Class<?> owningType;
+	private Class<?> declaringType;
 	
     private boolean initialized = false;
     private ArrayList<Object> annotations;
@@ -40,11 +40,11 @@ public class ModelProperty {
     private ArrayList<ModelProperty> cachedRedefiningProperties;
     private boolean isReadonly = false;
     private boolean isContainment = false;
-    private Class itemType = null;
+    private Class<?> itemType = null;
     private boolean isCollection = false;
     private Lazy<MetaProperty> metaProperty = null;
 	
-    public ModelProperty(String name, Class type, Class itemType, Class owningType, String declaredName, Class declaringType, Lazy<MetaProperty> metaProperty) {
+    public ModelProperty(String name, Class<?> type, Class<?> itemType, Class<?> owningType, String declaredName, Class<?> declaringType, Lazy<MetaProperty> metaProperty) {
         this.name = name;
         this.declaredName = declaredName;
         this.type = type;
@@ -68,15 +68,15 @@ public class ModelProperty {
 		return declaredName;
 	}
 
-	public Class getType() {
+	public Class<?> getType() {
 		return type;
 	}
 
-	public Class getOwningType() {
+	public Class<?> getOwningType() {
 		return owningType;
 	}
 
-	public Class getDeclaringType() {
+	public Class<?> getDeclaringType() {
 		return declaringType;
 	}
 
@@ -139,7 +139,7 @@ public class ModelProperty {
 		return isContainment;
 	}
 
-	public Class getItemType() {
+	public Class<?> getItemType() {
 		return itemType;
 	}
 
@@ -198,7 +198,7 @@ public class ModelProperty {
 		}
 	}
 	
-	public boolean isAssignableFrom(Class type) {
+	public boolean isAssignableFrom(Class<?> type) {
 		if (this.type == null || type == null) return false;
 		if (this.isCollection) {
 			if (this.itemType == null) return false;
@@ -208,19 +208,19 @@ public class ModelProperty {
 		}
 	}
 	
-    public static ModelProperty register(String name, Class type, Class innerType, Class owningType) {
+    public static ModelProperty register(String name, Class<?> type, Class<?> innerType, Class<?> owningType) {
         return ModelProperty.registerProperty(new ModelProperty(name, type, innerType, owningType, name + "Property", owningType, null));
     }
 	
-    public static ModelProperty register(String name, Class type, Class innerType, Class owningType, Class declaringType, Lazy<MetaProperty> metaProperty) {
+    public static ModelProperty register(String name, Class<?> type, Class<?> innerType, Class<?> owningType, Class<?> declaringType, Lazy<MetaProperty> metaProperty) {
         return ModelProperty.registerProperty(new ModelProperty(name, type, innerType, owningType, name + "Property", declaringType, metaProperty));
     }
 	
-    public static ModelProperty register(String name, Class type, Class innerType, Class owningType, String declaredName, Class declaringType, Lazy<MetaProperty> metaProperty) {
+    public static ModelProperty register(String name, Class<?> type, Class<?> innerType, Class<?> owningType, String declaredName, Class<?> declaringType, Lazy<MetaProperty> metaProperty) {
         return ModelProperty.registerProperty(new ModelProperty(name, type, innerType, owningType, declaredName, declaringType, metaProperty));
     }
 	
-	private static ModelProperty find(Class declaringType, String propertyName) {
+	private static ModelProperty find(Class<?> declaringType, String propertyName) {
 		HashMap<String, ModelProperty> propertyList = ModelProperty.declaredProperties.get(declaringType);
 		if (propertyList != null) {
 			ModelProperty result = propertyList.get(propertyName);
@@ -230,10 +230,10 @@ public class ModelProperty {
 	}
 	
 	private static void clearCache() {
-		ModelProperty.cachedProperties = new HashMap<Class, ModelProperty.PropertyCache>();
+		ModelProperty.cachedProperties = new HashMap<Class<?>, ModelProperty.PropertyCache>();
 	}
 	
-	private static PropertyCache getCachedProperties(Class type) {
+	private static PropertyCache getCachedProperties(Class<?> type) {
 		PropertyCache propertyCache = ModelProperty.cachedProperties.get(type);
 		if (propertyCache == null) {
 			propertyCache = new PropertyCache();
@@ -250,7 +250,7 @@ public class ModelProperty {
 					}
 				}
 			} 
-			for (Class intf: type.getInterfaces()) {
+			for (Class<?> intf: type.getInterfaces()) {
 				ArrayList<ModelProperty> superProperties = ModelProperty.getCachedProperties(intf).getAllProperties();
 				allProperties.addAll(superProperties);
 				for (ModelProperty prop : superProperties) {
@@ -287,15 +287,15 @@ public class ModelProperty {
 		return property;
 	}
 	
-	public static Iterable<ModelProperty> getPropertiesForType(Class owningType) {
+	public static Iterable<ModelProperty> getPropertiesForType(Class<?> owningType) {
 		return ModelProperty.getCachedProperties(owningType).getProperties();
 	}
 	
-	public static Iterable<ModelProperty> getDeclaredPropertiesForType(Class owningType) {
+	public static Iterable<ModelProperty> getDeclaredPropertiesForType(Class<?> owningType) {
 		return ModelProperty.getCachedProperties(owningType).getDeclaredProperties();
 	}
 	
-	public static Iterable<ModelProperty> getAllPropertiesForType(Class owningType) {
+	public static Iterable<ModelProperty> getAllPropertiesForType(Class<?> owningType) {
 		return ModelProperty.getCachedProperties(owningType).getAllProperties();
 	}
 	

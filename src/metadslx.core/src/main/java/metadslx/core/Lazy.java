@@ -41,7 +41,7 @@ public class Lazy<V> implements Serializable {
 
     protected Supplier<V> factory;
     
-    private static ThreadLocal<ArrayList<Lazy>> stack = ThreadLocal.withInitial(() -> new ArrayList<Lazy>());
+    private static ThreadLocal<ArrayList<Lazy<?>>> stack = ThreadLocal.withInitial(() -> new ArrayList<Lazy<?>>());
 
     public static <V> Lazy<V> create(Class<V> valueClass, boolean threadSafe) {
         if (threadSafe) {

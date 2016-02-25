@@ -1,14 +1,14 @@
 package metadslx.compiler;
 
 public abstract class SymbolBasedAnnotation {
-	private Class symbolType;
+	private Class<?> symbolType;
 	private boolean overrideSymbolType;
 
-	public Class getSymbolType() {
+	public Class<?> getSymbolType() {
 		return symbolType;
 	}
 
-	public void setSymbolType(Class symbolType) {
+	public void setSymbolType(Class<?> symbolType) {
 		this.symbolType = symbolType;
 	}
 

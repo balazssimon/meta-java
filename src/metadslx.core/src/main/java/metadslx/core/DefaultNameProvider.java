@@ -29,7 +29,7 @@ public class DefaultNameProvider implements INameProvider {
 	}
 
 	@Override
-	public Object getValue(Object node, Class type) {
+	public Object getValue(Object node, Class<?> type) {
 		if (node == null) return null;
         String value = node.toString();
         if (type == null)
@@ -72,7 +72,7 @@ public class DefaultNameProvider implements INameProvider {
         		// nop
         	}
         	try {
-        		Constructor ctr = type.getConstructor(String.class);
+        		Constructor<?> ctr = type.getConstructor(String.class);
         		if (ctr != null) {
         			return ctr.newInstance(value);
         		}

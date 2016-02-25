@@ -71,7 +71,7 @@ public abstract class ModelObject {
 		for (ModelProperty property : properties) {
 			Object value = this.mGet(property);
 			if (value instanceof ModelCollection) {
-				ModelCollection collection = (ModelCollection) value;
+				ModelCollection<Object> collection = (ModelCollection<Object>) value;
 				collection.mFlushLazyItems();
 			}
 		}
@@ -133,7 +133,7 @@ public abstract class ModelObject {
 		Object oldValue = this.values.get(property);
 		if (oldValue != null) {
 			if (property.isCollection() && oldValue instanceof ModelCollection) {
-				((ModelCollection) oldValue).clear();
+				((ModelCollection<Object>) oldValue).clear();
 			} else {
 				this.mRemove(property, oldValue);
 			}
@@ -295,7 +295,7 @@ public abstract class ModelObject {
 		if (this.values.containsKey(property)) {
 			Object oldValue = this.values.get(property);
 			if (oldValue instanceof ModelCollection) {
-				((ModelCollection) oldValue).mLazyAdd(value);
+				((ModelCollection<Object>) oldValue).mLazyAdd(value);
 				return;
 			} else if (property.isReadonly()) {
 				throw new ModelException("Error in '" + this.toString() + "'. Cannot reassign a readonly property '"
@@ -331,7 +331,7 @@ public abstract class ModelObject {
 		boolean added = false;
 		Object oldValue = this.mGet(property);
 		if (oldValue instanceof ModelCollection) {
-			ModelCollection collection = (ModelCollection) oldValue;
+			ModelCollection<Object> collection = (ModelCollection<Object>) oldValue;
 			if (value != null && collection.mAdd(value, false)) {
 				added = true;
 			} else if (value != null && firstCall) {
@@ -412,7 +412,7 @@ public abstract class ModelObject {
 		boolean removed = false;
 		Object oldValue = this.mGet(property);
 		if (oldValue instanceof ModelCollection) {
-			ModelCollection collection = (ModelCollection) oldValue;
+			ModelCollection<Object> collection = (ModelCollection<Object>) oldValue;
 			if (value != null && collection.mRemove(value, false)) {
 				removed = true;
 			} else if (value != null && firstCall) {

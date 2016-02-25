@@ -659,7 +659,7 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
 			writeLine("private Map<Integer, List<Object>> modeAnnotations = new HashMap<>();");
 		}
 		if (this.compiler.isParser()) {
-			writeLine("private Map<Class, List<Object>> ruleAnnotations = new HashMap<>();");
+			writeLine("private Map<Class<?>, List<Object>> ruleAnnotations = new HashMap<>();");
 			writeLine("private Map<Object, List<Object>> treeAnnotations = new HashMap<>();");
 		}
 
@@ -680,7 +680,7 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
 				writeLine(
 						"public Map<Integer, List<Object>> getModeAnnotations() { return this.lexerAnnotator.getModeAnnotations(); }");
 			}
-			writeLine("public Map<Class, List<Object>> getRuleAnnotations() { return this.ruleAnnotations; }");
+			writeLine("public Map<Class<?>, List<Object>> getRuleAnnotations() { return this.ruleAnnotations; }");
 			writeLine(
 					"public Map<Object, List<Object>> getTreeAnnotations() { return this.treeAnnotations; }");
 		} else {
@@ -932,7 +932,7 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
 		decIndent();
 		writeLine("}");
 		writeLine("");
-		writeLine("private void overrideSymbolType(ParseTree node, Class symbolType)");
+		writeLine("private void overrideSymbolType(ParseTree node, Class<?> symbolType)");
 		writeLine("{");
 		incIndent();
 		writeLine("if (node == null) return;");

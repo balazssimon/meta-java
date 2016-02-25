@@ -17,7 +17,7 @@ public class Antlr4DefaultNameProvider extends DefaultNameProvider {
     }
 
     @Override
-    public Object getValue(Object node, Class type)
+    public Object getValue(Object node, Class<?> type)
     {
         if (!(node instanceof ParseTree)) return null;
         ParseTree parseTree = (ParseTree)node;

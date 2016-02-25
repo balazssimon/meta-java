@@ -5,14 +5,14 @@ import java.util.List;
 
 public class TriviaAnnotation
 {
-    private List<Class> symbolTypes;
+    private List<Class<?>> symbolTypes;
     private String property;
     private boolean hasProperty;
     private TriviaPosition position;
 
     public TriviaAnnotation()
     {
-        this.symbolTypes = new ArrayList<Class>();
+        this.symbolTypes = new ArrayList<Class<?>>();
     }
 
 	public String getProperty() {
@@ -39,7 +39,7 @@ public class TriviaAnnotation
 		this.position = position;
 	}
 
-	public List<Class> getSymbolTypes() {
+	public List<Class<?>> getSymbolTypes() {
 		return symbolTypes;
 	}
     
