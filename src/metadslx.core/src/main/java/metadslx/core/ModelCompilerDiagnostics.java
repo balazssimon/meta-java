@@ -2,16 +2,17 @@ package metadslx.core;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ModelCompilerDiagnostics {
-    private ArrayList<DiagnosticMessage> messages;
+    private List<DiagnosticMessage> messages;
 
     private boolean sorted = false;
     private boolean logsIncluded = false;
     private boolean hasErrors = false;
     private boolean hasWarnings = false;
-    private ArrayList<DiagnosticMessage> sortedMessages;
+    private List<DiagnosticMessage> sortedMessages;
     
     public ModelCompilerDiagnostics() {
 		this.messages = new ArrayList<>();
@@ -35,7 +36,7 @@ public class ModelCompilerDiagnostics {
    				this.messages.stream().filter(m -> !m.isLog() || includeLog).
    					sorted(Comparator.comparing(DiagnosticMessage::getFileName).
    					thenComparing(DiagnosticMessage::getTextSpan)).distinct().
-   					collect(Collectors.toCollection(ArrayList::new));
+   					collect(Collectors.toList());
     		this.logsIncluded = includeLog;
     		this.sorted = true;
     	}
@@ -52,17 +53,26 @@ public class ModelCompilerDiagnostics {
     }
     
     public void addMessage(Severity severity, String message, String fileName, ModelObject symbol, boolean isLog) {
-    	if (ModelContext.hasContext()) {
-    		// TODO
-    	} else {
+    	boolean added = false;
+    	IModelCompiler compiler = ModelCompilerContext.current();
+    	if (compiler != null) {
+            for (TextSpan textSpan: compiler.getNameProvider().getSymbolTextSpans(symbol))
+            {
+                this.addMessage(severity, message, fileName, textSpan, isLog);
+            	added = true;
+            }
+    	}
+    	if (!added)
+    	{
     		this.addMessage(severity, message, fileName, new TextSpan(), isLog);
     	}
     }
     
     public void addMessage(Severity severity, String message, String fileName, Object node, boolean isLog) {
     	TextSpan textSpan = null;
-    	if (ModelContext.hasContext()) {
-    		// TODO
+    	IModelCompiler compiler = ModelCompilerContext.current();
+    	if (compiler != null) {
+            textSpan = compiler.getNameProvider().getTreeNodeTextSpan(node);
     	} else {
     		textSpan = new TextSpan();
     	}

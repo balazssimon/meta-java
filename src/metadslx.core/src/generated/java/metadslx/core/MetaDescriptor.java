@@ -717,7 +717,7 @@ public final class MetaDescriptor {
         
         @metadslx.core.Readonly
         public static final ModelProperty DefinitionsProperty =
-            metadslx.core.ModelProperty.register("Definitions", metadslx.core.ModelList.class, ModelObject.class, metadslx.core.MetaBoundExpression.class, metadslx.core.MetaDescriptor.MetaBoundExpression.class, metadslx.core.Lazy.create(() -> metadslx.core.MetaInstance.MetaBoundExpression_DefinitionsProperty, true));
+            metadslx.core.ModelProperty.register("Definitions", metadslx.core.BindingInfo.class, null, metadslx.core.MetaBoundExpression.class, metadslx.core.MetaDescriptor.MetaBoundExpression.class, metadslx.core.Lazy.create(() -> metadslx.core.MetaInstance.MetaBoundExpression_DefinitionsProperty, true));
         
         @metadslx.core.Readonly
         public static final ModelProperty DefinitionProperty =

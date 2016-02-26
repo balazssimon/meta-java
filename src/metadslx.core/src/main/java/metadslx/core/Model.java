@@ -29,10 +29,19 @@ public class Model {
 	
 	public void evalLazyValues() {
 		int oldCount = -1;
-		while (oldCount != this.instances.size()) {
+		int uninitialized = -1;
+		int oldUninitialized = 0;
+		while (oldCount != this.instances.size() || oldUninitialized != uninitialized) {
 			oldCount = this.instances.size();
 			for (ModelObject mo: this.cachedInstances()) {
 				mo.mEvalLazyValues();
+			}
+			oldUninitialized = uninitialized;
+			uninitialized = 0;
+			for (ModelObject mo: this.cachedInstances()) {
+				if (mo.mHasUninitializedValue()) {
+					++uninitialized;
+				}
 			}
 		}
 	}

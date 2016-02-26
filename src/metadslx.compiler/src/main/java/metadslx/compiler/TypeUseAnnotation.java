@@ -3,26 +3,26 @@ package metadslx.compiler;
 import java.util.ArrayList;
 import java.util.List;
 
-import metadslx.core.ResolveFlags;
+import metadslx.core.ResolutionLocation;
 
 public class TypeUseAnnotation {
 	private List<Class<?>> symbolTypes;
-	private ResolveFlags resolveFlags;
+	private ResolutionLocation location;
 
 	public TypeUseAnnotation() {
 		this.symbolTypes = new ArrayList<Class<?>>();
-		this.resolveFlags = ResolveFlags.All;
+		this.location = ResolutionLocation.All;
 	}
 
 	public List<Class<?>> getSymbolTypes() {
 		return symbolTypes;
 	}
 
-	public ResolveFlags getResolveFlags() {
-		return resolveFlags;
+	public ResolutionLocation getLocation() {
+		return location;
 	}
 
-	public void setResolveFlags(ResolveFlags resolveFlags) {
-		this.resolveFlags = resolveFlags;
+	public void setLocation(ResolutionLocation location) {
+		this.location = location;
 	}
 }

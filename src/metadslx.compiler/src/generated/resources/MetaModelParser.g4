@@ -59,7 +59,7 @@ enumMemberDeclaration :                       operationDeclaration;
                       
 classDeclaration : annotation*                                       KAbstract? KClass identifier (TColon                         classAncestors)? TOpenBrace classMemberDeclaration* TCloseBrace;
 classAncestors : classAncestor (TComma classAncestor)*;
-classAncestor :                                                                 qualifiedName;
+classAncestor :                                                                   qualifiedName;
 classMemberDeclaration 
 	:                       fieldDeclaration 
 	|                       operationDeclaration
@@ -201,7 +201,7 @@ expression
     | left=expression TAndAlso right=expression #logicalAndExpression                                   
     | left=expression TOrElse right=expression #logicalOrExpression                                  
     | left=expression TQuestionQuestion right=expression #nullCoalescingExpression                                          
-    | condition=expression TQuestion thenExpr=expression TColon elseExpr=expression #conditionalExpression                                       
+    | condition=expression TQuestion                 thenExpr=expression TColon                 elseExpr=expression #conditionalExpression                                       
     | left=expression operator=assignmentOperator right=expression #assignmentExpression 
 	;
 

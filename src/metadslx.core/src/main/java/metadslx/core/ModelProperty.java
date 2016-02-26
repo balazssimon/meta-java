@@ -202,9 +202,9 @@ public class ModelProperty {
 		if (this.type == null || type == null) return false;
 		if (this.isCollection) {
 			if (this.itemType == null) return false;
-			return this.itemType.isAssignableFrom(type);
+			return MetaExtensions.isAssignableFrom(this.itemType, type);
 		} else {
-			return this.type.isAssignableFrom(type);
+			return MetaExtensions.isAssignableFrom(this.type, type);
 		}
 	}
 	

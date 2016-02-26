@@ -30,6 +30,7 @@ public class Antlr4DefaultNameProvider extends DefaultNameProvider {
         {
         	//TODO
             //return Regex.Unescape(text.substring(1, text.length() - 1));
+        	return text;
         }
         else if (text.length() >= 3 && text.startsWith("@\"") && text.endsWith("\""))
         {
@@ -39,6 +40,7 @@ public class Antlr4DefaultNameProvider extends DefaultNameProvider {
         {
         	//TODO
             //return Regex.Unescape(text.substring(1, text.length() - 1));
+        	return text;
         }
         return super.getValue(text, type);
     }

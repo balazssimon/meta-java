@@ -481,7 +481,7 @@ public class MetaModelParserAnnotator extends MetaModelParserBaseVisitor<Object>
             }
             TypeUseAnnotation __tmp30 = new TypeUseAnnotation();
             __tmp30.getSymbolTypes().add(MetaClass.class);
-            __tmp30.setResolveFlags(ResolveFlags.Parent);
+            __tmp30.setLocation(ResolutionLocation.Parent);
             elemAnnotList.add(__tmp30);
         }
         this.handleSymbolType(ctx);
@@ -2599,7 +2599,7 @@ public class MetaModelParserAnnotator extends MetaModelParserBaseVisitor<Object>
                 this.treeAnnotations.put(elem, elemAnnotList);
             }
             PropertyAnnotation __tmp223 = new PropertyAnnotation();
-            __tmp223.setName("ThenExpr");
+            __tmp223.setName("Then");
             elemAnnotList.add(__tmp223);
         }
         if (ctx.elseExpr != null)
@@ -2612,7 +2612,7 @@ public class MetaModelParserAnnotator extends MetaModelParserBaseVisitor<Object>
                 this.treeAnnotations.put(elem, elemAnnotList);
             }
             PropertyAnnotation __tmp224 = new PropertyAnnotation();
-            __tmp224.setName("ElseExpr");
+            __tmp224.setName("Else");
             elemAnnotList.add(__tmp224);
         }
         this.handleSymbolType(ctx);

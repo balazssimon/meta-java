@@ -19,8 +19,8 @@ class MetaFunctionCallExpressionImpl extends metadslx.core.ModelObject implement
     public MetaFunctionCallExpressionImpl() {
         this.mLazySet(metadslx.core.MetaDescriptor.MetaBoundExpression.UniqueDefinitionProperty, metadslx.core.Lazy.create(() -> true, true));
         this.mSet(metadslx.core.MetaDescriptor.MetaBoundExpression.ArgumentsProperty, new metadslx.core.ModelList<MetaExpression>(this, metadslx.core.MetaDescriptor.MetaBoundExpression.ArgumentsProperty));
-        this.mLazySet(metadslx.core.MetaDescriptor.MetaBoundExpression.DefinitionsProperty, metadslx.core.Lazy.create(() -> ((MetaFunctionCallExpression)this).getExpression() instanceof MetaBoundExpression ? (((MetaBoundExpression)((MetaFunctionCallExpression)this).getExpression()).getDefinitions()).stream().filter(e -> ModelCompilerContext.current().getTypeProvider().getTypeOf(e) instanceof metadslx.core.MetaFunctionType).collect(java.util.stream.Collectors.toList()) : null, true));
-        this.mLazySet(metadslx.core.MetaDescriptor.MetaBoundExpression.DefinitionProperty, metadslx.core.Lazy.create(() -> ModelCompilerContext.current().getBindingProvider().bind(this, ((MetaBoundExpression)this).getDefinitions(), new BindingInfo()), true));
+        this.mLazySet(metadslx.core.MetaDescriptor.MetaBoundExpression.DefinitionsProperty, metadslx.core.Lazy.create(() -> ((MetaFunctionCallExpression)this).getExpression() instanceof MetaBoundExpression ? ((MetaBoundExpression)((MetaFunctionCallExpression)this).getExpression()).getDefinitions() : metadslx.core.BindingInfo.createFromDefinitions((ModelObject)((MetaFunctionCallExpression)this).getExpression().getType()), true));
+        this.mLazySet(metadslx.core.MetaDescriptor.MetaBoundExpression.DefinitionProperty, metadslx.core.Lazy.create(() -> ((MetaBoundExpression)this).getUniqueDefinition() ? ModelCompilerContext.current().getBindingProvider().bind((ModelObject)((MetaBoundExpression)this), ((MetaBoundExpression)this).getDefinitions()) : null, true));
         this.mLazySet(metadslx.core.MetaDescriptor.MetaExpression.NoTypeErrorProperty, metadslx.core.Lazy.create(() -> ModelCompilerContext.current().getTypeProvider().typeCheck((ModelObject)((MetaExpression)this)), true));
         this.mLazySet(metadslx.core.MetaDescriptor.MetaTypedElement.TypeProperty, metadslx.core.Lazy.create(() -> ModelCompilerContext.current().getTypeProvider().getReturnTypeOf((ModelObject)((MetaFunctionCallExpression)this).getDefinition()), true));
         this.mLazySetChild(metadslx.core.MetaDescriptor.MetaFunctionCallExpression.ExpressionProperty, metadslx.core.MetaDescriptor.MetaBoundExpression.UniqueDefinitionProperty, metadslx.core.Lazy.create(() -> false, true));
@@ -52,10 +52,10 @@ class MetaFunctionCallExpressionImpl extends metadslx.core.ModelObject implement
         else return (java.util.List<metadslx.core.MetaExpression>)null;
     }
     
-    public java.util.List<ModelObject> getDefinitions() {
+    public metadslx.core.BindingInfo getDefinitions() {
         Object result = this.mGet(metadslx.core.MetaDescriptor.MetaBoundExpression.DefinitionsProperty); 
-        if (result != null) return (java.util.List<ModelObject>)result;
-        else return (java.util.List<ModelObject>)null;
+        if (result != null) return (metadslx.core.BindingInfo)result;
+        else return (metadslx.core.BindingInfo)null;
     }
     
     public ModelObject getDefinition() {

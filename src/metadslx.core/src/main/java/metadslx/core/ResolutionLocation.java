@@ -1,6 +1,6 @@
 package metadslx.core;
 
-public enum ResolveFlags {
+public enum ResolutionLocation {
     Children(1),
     Inherited(2),
     Parent(4),
@@ -11,11 +11,15 @@ public enum ResolveFlags {
     
     private int value;
       
-    private ResolveFlags(int value) {
+    private ResolutionLocation(int value) {
 		this.value = value;
 	}
     
     public int getValue() {
     	return this.value;
+    }
+    
+    public boolean hasFlag(ResolutionLocation location) {
+    	return (this.value & location.value) != 0;
     }
 }

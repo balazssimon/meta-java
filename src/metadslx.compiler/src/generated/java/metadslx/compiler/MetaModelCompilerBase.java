@@ -44,15 +44,12 @@ public abstract class MetaModelCompilerBase extends MetaCompiler
         MetaModelParserPropertyEvaluator propertyEvaluator = new MetaModelParserPropertyEvaluator(this);
         propertyEvaluator.visit(this.parseTree);
         
-        for (ModelObject symbol: this.getData().getSymbols())
-        {
-            symbol.mEvalLazyValues();
-        }
+        this.getModel().evalLazyValues();
         for (ModelObject symbol: this.getData().getSymbols())
         {
             if (symbol.mHasUninitializedValue())
             {
-                this.getDiagnostics().addError("The symbol '" + symbol + "' has uninitialized lazy values.", this.getFileName(), new TextSpan(), true);
+                this.getDiagnostics().addError("The symbol '" + symbol + "' has uninitialized lazy values.", this.getFileName(), this.getNameProvider().getSymbolTextSpans(symbol), true);
             }
         }
     }

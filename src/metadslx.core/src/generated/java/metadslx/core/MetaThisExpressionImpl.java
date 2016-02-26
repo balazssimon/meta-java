@@ -39,10 +39,10 @@ class MetaThisExpressionImpl extends metadslx.core.ModelObject implements metads
         else return (java.util.List<metadslx.core.MetaExpression>)null;
     }
     
-    public java.util.List<ModelObject> getDefinitions() {
+    public metadslx.core.BindingInfo getDefinitions() {
         Object result = this.mGet(metadslx.core.MetaDescriptor.MetaBoundExpression.DefinitionsProperty); 
-        if (result != null) return (java.util.List<ModelObject>)result;
-        else return (java.util.List<ModelObject>)null;
+        if (result != null) return (metadslx.core.BindingInfo)result;
+        else return (metadslx.core.BindingInfo)null;
     }
     
     public ModelObject getDefinition() {

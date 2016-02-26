@@ -1386,8 +1386,7 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
 		writeLine("if (symbol.mHasUninitializedValue())");
 		writeLine("{");
 		incIndent();
-		writeLine(
-				"this.getDiagnostics().addError(\"The symbol '\" + symbol + \"' has uninitialized lazy values.\", this.getFileName(), new TextSpan(), true);");
+		writeLine("this.getDiagnostics().addError(\"The symbol '\" + symbol + \"' has uninitialized lazy values.\", this.getFileName(), this.getNameProvider().getSymbolTextSpans(symbol), true);");
 		decIndent();
 		writeLine("}");
 		decIndent();

@@ -130,9 +130,9 @@ public abstract class ModelObject {
 	}
 
 	public void mUnSet(ModelProperty property) {
-		Object oldValue = this.values.get(property);
-		if (oldValue != null) {
-			if (property.isCollection() && oldValue instanceof ModelCollection) {
+		if (this.values.containsKey(property)) {
+			Object oldValue = this.values.get(property);
+			if (property.isCollection() && oldValue != null && oldValue instanceof ModelCollection) {
 				((ModelCollection<?>) oldValue).clear();
 			} else {
 				this.mRemove(property, oldValue);
@@ -149,12 +149,14 @@ public abstract class ModelObject {
 	public void mLazySet(ModelProperty property, Lazy<Object> value) {
 		boolean containsValue = this.values.containsKey(property);
 		Object oldValue = this.values.get(property);
-		if (property.isCollection()) {
-			throw new ModelException("Error in '" + this.toString() + "'. Cannot reassign a collection property '"
-					+ property.toString() + "'. Consider adding the items instead.");
-		} else if (containsValue && property.isReadonly()) {
-			throw new ModelException("Error in '" + this.toString() + "'. Cannot reassign a readonly property '"
-					+ property.toString() + "'.");
+		if (oldValue != null) {
+			if (property.isCollection()) {
+				throw new ModelException("Error in '" + this.toString() + "'. Cannot reassign a collection property '"
+						+ property.toString() + "'. Consider adding the items instead.");
+			} else if (containsValue && property.isReadonly()) {
+				throw new ModelException("Error in '" + this.toString() + "'. Cannot reassign a readonly property '"
+						+ property.toString() + "'.");
+			}
 		} else {
 			this.mRemove(property, oldValue);
 		}
@@ -295,12 +297,11 @@ public abstract class ModelObject {
 		}
 		if (this.values.containsKey(property)) {
 			Object oldValue = this.values.get(property);
-			if (oldValue instanceof ModelCollection) {
+			if (oldValue != null && oldValue instanceof ModelCollection) {
 				((ModelCollection<Object>) oldValue).mLazyAdd(value);
 				return;
-			} else if (property.isReadonly()) {
-				throw new ModelException("Error in '" + this.toString() + "'. Cannot reassign a readonly property '"
-						+ property.toString() + "'.");
+			//} else if (oldValue != null && property.isReadonly()) {
+				//throw new ModelException("Error in '" + this.toString() + "'. Cannot reassign a readonly property '" + property.toString() + "'.");
 			} else {
 				this.mRemove(property, oldValue);
 				this.values.remove(property);

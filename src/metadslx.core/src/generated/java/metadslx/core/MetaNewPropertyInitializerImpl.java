@@ -16,7 +16,7 @@ class MetaNewPropertyInitializerImpl extends metadslx.core.ModelObject implement
     }
 
     public MetaNewPropertyInitializerImpl() {
-        this.mLazySet(metadslx.core.MetaDescriptor.MetaNewPropertyInitializer.PropertyProperty, metadslx.core.Lazy.create(() -> ModelCompilerContext.current().getBindingProvider().bind(this, ModelCompilerContext.current().getResolutionProvider().resolve(java.util.Arrays.asList(new metadslx.core.ModelObject[] { (ModelObject)((MetaNewPropertyInitializer)this).getParent().getType() }), ResolveKind.Name, ((MetaNewPropertyInitializer)this).getPropertyName(), new ResolutionInfo(), ResolveFlags.All), new BindingInfo()), true));
+        this.mLazySet(metadslx.core.MetaDescriptor.MetaNewPropertyInitializer.PropertyProperty, metadslx.core.Lazy.create(() -> ModelCompilerContext.current().getBindingProvider().bind(null, ModelCompilerContext.current().getResolutionProvider().resolve(new metadslx.core.ResolutionInfo((ModelObject)((MetaNewPropertyInitializer)this).getParent().getType(), ResolveKind.Name, ((MetaNewPropertyInitializer)this).getPropertyName()))), true));
         this.mLazySetChild(metadslx.core.MetaDescriptor.MetaNewPropertyInitializer.ValueProperty, metadslx.core.MetaDescriptor.MetaExpression.ExpectedTypeProperty, metadslx.core.Lazy.create(() -> ModelCompilerContext.current().getTypeProvider().getTypeOf(((MetaNewPropertyInitializer)this).getProperty()), true));
         metadslx.core.MetaImplementationProvider.implementation().MetaNewPropertyInitializer(this);
         this.mMakeDefault();

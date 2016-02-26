@@ -1,12 +1,10 @@
 package metadslx.compiler;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import metadslx.core.BindingInfo;
 import metadslx.core.Lazy;
 import metadslx.core.MetaExtensions;
 import metadslx.core.ModelObject;
@@ -51,23 +49,17 @@ public class MetaCompilerReferencePhase extends MetaCompilerPhase {
             if (tua != null)
             {
                 List<ParseTree> names = this.getNames(node);
-                List<String> nameStrings = names.stream().map(n -> this.getName(n)).collect(Collectors.toList());
                 ModelObject activeScopeSymbol = this.activeScopeSymbol();
                 ModelObject activeSymbol = this.activeSymbol();
                 PropertyAnnotation activeProperty = this.activeProperty();
                 ResolutionInfo ri = new ResolutionInfo();
-                ri.setNode(node);
-                BindingInfo bi = new BindingInfo();
-                bi.setNode(node);
-                ArrayList<ModelObject> scopeList = new ArrayList<>();
-                scopeList.add(activeScopeSymbol);
+                ri.setKind(ResolveKind.Type);
+                ri.getScopes().add(activeScopeSymbol);
+                ri.getQualifiedNameNodes().addAll(names);
+                ri.setLocation(tua.getLocation());
+                ri.getSymbolTypes().addAll(tua.getSymbolTypes());
                 Lazy<Object> lazySymbol = Lazy.create(
-                    () ->
-                        this.getCompiler().getBindingProvider().bind(null,
-                        this.filterByTypes(
-                            this.getCompiler().getResolutionProvider().resolve(scopeList, ResolveKind.Type, nameStrings, ri, tua.getResolveFlags()),
-                            tua.getSymbolTypes()),
-                        bi)
+                		() -> this.getCompiler().getBindingProvider().bind(null, this.getCompiler().getResolutionProvider().resolve(ri))
                     );
                 this.setLazyProperty(node, activeSymbol, activeProperty, lazySymbol);
                 this.getData().registerLazySymbol(node, lazySymbol);
@@ -75,51 +67,22 @@ public class MetaCompilerReferencePhase extends MetaCompilerPhase {
             if (nua != null)
             {
                 List<ParseTree> names = this.getNames(node);
-                List<String> nameStrings = names.stream().map(n -> this.getName(n)).collect(Collectors.toList());
                 ModelObject activeScopeSymbol = this.activeScopeSymbol();
                 ModelObject activeSymbol = this.activeSymbol();
                 PropertyAnnotation activeProperty = this.activeProperty();
                 ResolutionInfo ri = new ResolutionInfo();
-                ri.setNode(node);
-                BindingInfo bi = new BindingInfo();
-                bi.setNode(node);
-                ArrayList<ModelObject> scopeList = new ArrayList<>();
-                scopeList.add(activeScopeSymbol);
+                ri.setKind(ResolveKind.Name);
+                ri.getScopes().add(activeScopeSymbol);
+                ri.getQualifiedNameNodes().addAll(names);
+                ri.setLocation(nua.getLocation());
+                ri.getSymbolTypes().addAll(nua.getSymbolTypes());
                 Lazy<Object> lazySymbol = Lazy.create(
-                    () ->
-                        this.getCompiler().getBindingProvider().bind(null,
-                        this.filterByTypes(
-                            this.getCompiler().getResolutionProvider().resolve(scopeList, ResolveKind.Name, nameStrings, ri, nua.getResolveFlags()),
-                            nua.getSymbolTypes()),
-                        bi)
+                		() -> this.getCompiler().getBindingProvider().bind(null, this.getCompiler().getResolutionProvider().resolve(ri))
                     );
                 this.setLazyProperty(node, activeSymbol, activeProperty, lazySymbol);
                 this.getData().registerLazySymbol(node, lazySymbol);
             }
         }
-    }
-
-    private Iterable<ModelObject> filterByTypes(Iterable<ModelObject> mobjs, List<Class<?>> types)
-    {
-        if (types.size() == 0) return mobjs;
-        ArrayList<ModelObject> result = new ArrayList<ModelObject>();
-        for (ModelObject mobj: mobjs)
-        {
-            boolean valid = false;
-            for (Class<?> type: types)
-            {
-                if (type.isAssignableFrom(mobj.getClass()))
-                {
-                    valid = true;
-                    break;
-                }
-            }
-            if (valid)
-            {
-                result.add(mobj);
-            }
-        }
-        return result;
     }
 
     protected void handlePropertyValues(ParseTree node)
@@ -332,23 +295,31 @@ public class MetaCompilerReferencePhase extends MetaCompilerPhase {
                                 retrievedTrivia = true;
                             }
                             String trivia = null;
-                            switch (ta.getPosition())
-                            {
-                                case Any:
-                                    trivia = leadingTrivia;
-                                    if (trivia == null)
-                                    {
-                                        trivia = trailingTrivia;
-                                    }
-                                    break;
-                                case Leading:
-                                    trivia = leadingTrivia;
-                                    break;
-                                case Trailing:
+                            if (ta.getPosition() == null) {
+                                trivia = leadingTrivia;
+                                if (trivia == null)
+                                {
                                     trivia = trailingTrivia;
-                                    break;
-                                default:
-                                    break;
+                                }
+                            } else {
+	                            switch (ta.getPosition())
+	                            {
+	                                case Any:
+	                                    trivia = leadingTrivia;
+	                                    if (trivia == null)
+	                                    {
+	                                        trivia = trailingTrivia;
+	                                    }
+	                                    break;
+	                                case Leading:
+	                                    trivia = leadingTrivia;
+	                                    break;
+	                                case Trailing:
+	                                    trivia = trailingTrivia;
+	                                    break;
+	                                default:
+	                                    break;
+	                            }
                             }
                             if (!MetaExtensions.isNullOrWhiteSpace(trivia))
                             {

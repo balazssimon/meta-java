@@ -63,6 +63,13 @@ public class MetaCompilerPhase {
     
 	public MetaCompilerPhase(MetaCompiler compiler) {
 		this.compiler = compiler;
+		this.modelFactory = new ModelFactory();
+		this.symbolStack = new ArrayList<>();
+		this.propertyStack = new ArrayList<>();
+		this.scopeKindRestoreStack = new ArrayList<>();
+		this.scopeKindStack = new ArrayList<>();
+		this.nameKindRestoreStack = new ArrayList<>();
+		this.nameKindStack = new ArrayList<>();
 	}
 
 	protected MetaCompilerData getData() {
@@ -276,14 +283,14 @@ public class MetaCompilerPhase {
             finally
             {
                 int restoreCount = 0;
-                restoreCount = this.currentScopeKindRestoreCount();
+                restoreCount = this.scopeKindStack.size()-this.currentScopeKindRestoreCount();
                 for (int i = 0; i < restoreCount; ++i) {
                 	if (this.scopeKindStack.size() > 0) {
                         this.scopeKindStack.remove(this.scopeKindStack.size()-1);
                 	}
                 }
                 this.scopeKindRestoreStack.remove(this.scopeKindRestoreStack.size() - 1);
-                restoreCount = this.currentNameKindRestoreCount();
+                restoreCount = this.nameKindStack.size()-this.currentNameKindRestoreCount();
                 for (int i = 0; i < restoreCount; ++i) {
                 	if (this.nameKindStack.size() > 0) {
                         this.nameKindStack.remove(this.nameKindStack.size()-1);

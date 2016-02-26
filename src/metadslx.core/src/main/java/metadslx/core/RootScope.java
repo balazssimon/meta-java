@@ -10,6 +10,18 @@ public class RootScope extends ModelObject {
 		this.mSet(RootScope.EntriesProperty, new ModelList<ModelObject>(this, RootScope.EntriesProperty));
 	}
 	
+    public void addMetaBuiltInEntries()
+    {
+        for (MetaType type: MetaBuiltInTypes.getTypes())
+        {
+            this.getBuiltInEntries().add((ModelObject)type);
+        }
+        for (MetaFunction func: MetaBuiltInFunctions.getFunctions())
+        {
+            this.getBuiltInEntries().add((ModelObject)func);
+        }
+    }
+	
 	@ScopeEntry
 	public static final ModelProperty BuiltInEntriesProperty =
 		ModelProperty.register("BuiltInEntries", List.class, ModelObject.class, RootScope.class);

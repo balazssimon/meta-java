@@ -55,6 +55,12 @@ public class MetaImplementation extends MetaImplementationBase {
 		super.MetaNewCollectionExpression(_this);
         ((ModelObject)_this).mLazySetChild(MetaDescriptor.MetaNewCollectionExpression.ValuesProperty, MetaDescriptor.MetaExpression.ExpectedTypeProperty, Lazy.create(() -> _this.getTypeReference().getInnerType(), true));
 	}
+
+	@Override
+	public void MetaBoundExpression(metadslx.core.MetaBoundExpression _this) {
+		super.MetaBoundExpression(_this);
+		//((ModelObject)_this).mLazySetChild(MetaDescriptor.MetaBoundExpression.ArgumentsProperty, MetaDescriptor.MetaExpression.ExpectedTypeProperty, Lazy.create(() -> MetaInstance.None));
+	}
 	
 	@Override
 	public List<metadslx.core.MetaOperation> MetaClass_getAllOperations(metadslx.core.MetaClass _this) {

@@ -14,4 +14,8 @@ public enum ResolveKind {
     public int getValue() {
     	return this.value;
     }
+    
+    public boolean hasFlag(ResolveKind kind) {
+    	return (value & kind.value) != 0;
+    }
 }

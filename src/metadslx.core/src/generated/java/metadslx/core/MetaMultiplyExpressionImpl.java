@@ -20,8 +20,8 @@ class MetaMultiplyExpressionImpl extends metadslx.core.ModelObject implements me
         this.mLazySet(metadslx.core.MetaDescriptor.MetaOperatorExpression.NameProperty, metadslx.core.Lazy.create(() -> "operator()*()", true));
         this.mLazySet(metadslx.core.MetaDescriptor.MetaBoundExpression.UniqueDefinitionProperty, metadslx.core.Lazy.create(() -> true, true));
         this.mSet(metadslx.core.MetaDescriptor.MetaBoundExpression.ArgumentsProperty, new metadslx.core.ModelList<MetaExpression>(this, metadslx.core.MetaDescriptor.MetaBoundExpression.ArgumentsProperty));
-        this.mLazySet(metadslx.core.MetaDescriptor.MetaBoundExpression.DefinitionsProperty, metadslx.core.Lazy.create(() -> ModelCompilerContext.current().getResolutionProvider().resolve(java.util.Arrays.asList(new metadslx.core.ModelObject[] { ModelCompilerContext.current().getResolutionProvider().getCurrentScope(this) }), ResolveKind.Name, ((MetaOperatorExpression)this).getName(), new ResolutionInfo(), ResolveFlags.All), true));
-        this.mLazySet(metadslx.core.MetaDescriptor.MetaBoundExpression.DefinitionProperty, metadslx.core.Lazy.create(() -> ModelCompilerContext.current().getBindingProvider().bind(this, ((MetaBoundExpression)this).getDefinitions(), new BindingInfo()), true));
+        this.mLazySet(metadslx.core.MetaDescriptor.MetaBoundExpression.DefinitionsProperty, metadslx.core.Lazy.create(() -> ModelCompilerContext.current().getResolutionProvider().resolve(new metadslx.core.ResolutionInfo(ModelCompilerContext.current().getResolutionProvider().getCurrentScope(this), ResolveKind.Name, ((MetaOperatorExpression)this).getName())), true));
+        this.mLazySet(metadslx.core.MetaDescriptor.MetaBoundExpression.DefinitionProperty, metadslx.core.Lazy.create(() -> ((MetaBoundExpression)this).getUniqueDefinition() ? ModelCompilerContext.current().getBindingProvider().bind((ModelObject)((MetaBoundExpression)this), ((MetaBoundExpression)this).getDefinitions()) : null, true));
         this.mLazySet(metadslx.core.MetaDescriptor.MetaExpression.NoTypeErrorProperty, metadslx.core.Lazy.create(() -> ModelCompilerContext.current().getTypeProvider().typeCheck((ModelObject)((MetaExpression)this)), true));
         this.mLazySet(metadslx.core.MetaDescriptor.MetaTypedElement.TypeProperty, metadslx.core.Lazy.create(() -> ModelCompilerContext.current().getTypeProvider().getTypeOf(((MetaBoundExpression)this).getDefinition()), true));
         metadslx.core.MetaImplementationProvider.implementation().MetaMultiplyExpression(this);
@@ -68,10 +68,10 @@ class MetaMultiplyExpressionImpl extends metadslx.core.ModelObject implements me
         else return (java.util.List<metadslx.core.MetaExpression>)null;
     }
     
-    public java.util.List<ModelObject> getDefinitions() {
+    public metadslx.core.BindingInfo getDefinitions() {
         Object result = this.mGet(metadslx.core.MetaDescriptor.MetaBoundExpression.DefinitionsProperty); 
-        if (result != null) return (java.util.List<ModelObject>)result;
-        else return (java.util.List<ModelObject>)null;
+        if (result != null) return (metadslx.core.BindingInfo)result;
+        else return (metadslx.core.BindingInfo)null;
     }
     
     public ModelObject getDefinition() {
