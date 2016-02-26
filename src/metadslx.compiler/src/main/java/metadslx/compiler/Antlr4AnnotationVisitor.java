@@ -1147,10 +1147,10 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
 							|| "NameUse".equals(annot.getType().getName())
 							|| "Property".equals(annot.getType().getName())
 							|| "Trivia".equals(annot.getType().getName()))) {
-						writeLine("{0}.{1}.add({2}.class);", variableName, propName, value);
+						writeLine("{0}.get{1}().add({2}.class);", variableName, propName, value);
 					} else {
 						String propValue = this.toValue(value, annot.getType().isDynamic());
-						writeLine("{0}.{1}.add({2});", variableName, propName, propValue);
+						writeLine("{0}.get{1}().add({2});", variableName, propName, propValue);
 					}
 				}
 			} else {
@@ -1209,6 +1209,8 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
 			writeLine("package {0};", targetPackage);
 			appendLine();
 		}
+		writeLine("import metadslx.compiler.MetaCompiler;");
+		writeLine("import metadslx.compiler.MetaCompilerPropertyEvaluator;");
 		writeLine("import metadslx.core.Lazy;");
 		writeLine();
 		if (this.compiler.isParser() && this.parserHeader != null && !"".equals(this.parserHeader.trim())) {
@@ -1307,6 +1309,10 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
 		writeLine("import org.antlr.v4.runtime.ANTLRInputStream;");
 		writeLine("import org.antlr.v4.runtime.CommonTokenStream;");
 		writeLine();
+		writeLine("import metadslx.compiler.MetaCompiler;");
+		writeLine("import metadslx.compiler.MetaCompilerDefinitionPhase;");
+		writeLine("import metadslx.compiler.MetaCompilerMergePhase;");
+		writeLine("import metadslx.compiler.MetaCompilerReferencePhase;");
 		writeLine("import metadslx.core.ModelObject;");
 		writeLine("import metadslx.core.TextSpan;");
 		if (this.compiler.isParser() && this.parserHeader != null && !"".equals(this.parserHeader.trim())) {
@@ -1374,12 +1380,7 @@ public class Antlr4AnnotationVisitor extends AnnotatedAntlr4ParserBaseVisitor<Ob
 		writeLine("{0}PropertyEvaluator propertyEvaluator = new {0}PropertyEvaluator(this);", this.parserName);
 		writeLine("propertyEvaluator.visit(this.parseTree);");
 		writeLine();
-		writeLine("for (ModelObject symbol: this.getData().getSymbols())");
-		writeLine("{");
-		incIndent();
-		writeLine("symbol.mEvalLazyValues();");
-		decIndent();
-		writeLine("}");
+		writeLine("this.getModel().evalLazyValues();");
 		writeLine("for (ModelObject symbol: this.getData().getSymbols())");
 		writeLine("{");
 		incIndent();

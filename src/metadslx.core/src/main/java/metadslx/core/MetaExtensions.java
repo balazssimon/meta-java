@@ -83,6 +83,7 @@ public class MetaExtensions {
     	if (Long.class.equals(source) && long.class.equals(target)) return true;
     	if (Float.class.equals(source) && float.class.equals(target)) return true;
     	if (Double.class.equals(source) && double.class.equals(target)) return true;
-    	return target.isAssignableFrom(source);
+    	boolean assignable = target.isAssignableFrom(source);
+    	return assignable;
     }
 }

@@ -68,7 +68,14 @@ public class Program {
 			 */
 			 //compileAG4("../metadslx.compiler/src/main", "../metadslx.compiler/src/generated", "MetaModelLexer");
 			 //compileAG4("../metadslx.compiler/src/main", "../metadslx.compiler/src/generated", "MetaModelParser");
-			 compileMeta("../metadslx.core/src/main", "../metadslx.core/src/generated", "MetaModel", false);
+			 compileMeta(".", ".", "MetaModel", false);
+			 //compileAG4("../../../soal-java/src/metadslx.soal.runtime/src/main", "../../../soal-java/src/metadslx.soal.runtime/src/generated", "SoalLexer");
+			 //compileAG4("../../../soal-java/src/metadslx.soal.runtime/src/main", "../../../soal-java/src/metadslx.soal.runtime/src/generated", "SoalParser");
+			 //compileMeta("../../../soal-java/src/metadslx.soal.runtime/src/main", "../../../soal-java/src/metadslx.soal.runtime/src/generated", "Soal", false);
+			//k:\VersionControl\soal-java\src\metadslx.soal.runtime\src\main\resources\
+			//compileGenerator("../../../soal-java/src/metadslx.soal.runtime/src/main/resources/XsdGenerator.mgen", "../../../soal-java/src/metadslx.soal.runtime/src/generated/java/metadslx/languages/soal/XsdGenerator.java");
+			//compileGenerator("../../../soal-java/src/metadslx.soal.runtime/src/main/resources/WsdlGenerator.mgen", "../../../soal-java/src/metadslx.soal.runtime/src/generated/java/metadslx/languages/soal/WsdlGenerator.java");
+			//compileGenerator("../../../soal-java/src/metadslx.soal.runtime/src/main/resources/SoalPrinter.mgen", "../../../soal-java/src/metadslx.soal.runtime/src/generated/java/metadslx/languages/soal/SoalPrinter.java");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -80,7 +87,8 @@ public class Program {
 			String source = readFile(fileName);
 
 			AnnotatedAntlr4Compiler compiler = new AnnotatedAntlr4Compiler(source, outputDirectory, fileName);
-			compiler.setDefaultPackage("metadslx.compiler");
+			//compiler.setDefaultPackage("metadslx.compiler");
+			compiler.setDefaultPackage("metadslx.languages.soal");
 			compiler.compile();
 			String outputFileName = new File(
 					outputDirectory + "/java/" + compiler.getDefaultPackage().replace('.', '/'),
@@ -144,7 +152,8 @@ public class Program {
 	private static void compileMeta(String inputDirectory, String outputDirectory, String inputFileName,
 			boolean csharpOutput) {
 		try {
-			String fileName = new File(inputDirectory + "/resources", inputFileName + ".mm").getAbsolutePath();
+			//String fileName = new File(inputDirectory + "/resources", inputFileName + ".mm").getAbsolutePath();
+			String fileName = new File(inputDirectory, inputFileName + ".mm").getAbsolutePath();
 			String source = readFile(fileName);
 			MetaModelCompiler compiler = new MetaModelCompiler(source, inputFileName+".mm");
 			compiler.compile();

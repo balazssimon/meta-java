@@ -1,5 +1,8 @@
 package metadslx.core;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 public class ModelFactory {
 	private String packageName;
 
@@ -36,14 +39,22 @@ public class ModelFactory {
             throw new ModelException("Class type '" + typeName + "' is not found.");
 		} else {
 			try {
-				Object result = implType.newInstance();
-				if (result instanceof ModelObject) {
-					return (T)result;
+				Constructor<?> ctr = implType.getDeclaredConstructor();
+				if (ctr != null) {
+					ctr.setAccessible(true);
+					Object result = ctr.newInstance();
+					if (result instanceof ModelObject) {
+						return (T)result;
+					} else {
+	                    throw new ModelException("Class type '" + typeName + "' is not a descendant of '" + ModelObject.class.getName() + "'.");
+					}
 				} else {
-                    throw new ModelException("Class type '" + typeName + "' is not a descendant of '" + ModelObject.class.getName() + "'.");
+		            throw new ModelException("Class type '" + typeName + "' has no default constructor.");
 				}
-			} catch (InstantiationException | IllegalAccessException e) {
+			} catch (InvocationTargetException | IllegalArgumentException | InstantiationException | IllegalAccessException e) {
 	            throw new ModelException("Class type '" + typeName + "' cannot be instantiated.");
+			} catch (SecurityException | NoSuchMethodException e) {
+	            throw new ModelException("Class type '" + typeName + "' has no default constructor.");
 			}
 		}
     }

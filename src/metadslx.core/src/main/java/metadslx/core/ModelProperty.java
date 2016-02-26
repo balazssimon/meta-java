@@ -49,6 +49,7 @@ public class ModelProperty {
         this.declaredName = declaredName;
         this.type = type;
         this.itemType = itemType;
+        this.isCollection = itemType != null;
         this.owningType = owningType;
         this.declaringType = declaringType;
         this.annotations = new ArrayList<Object>();
@@ -158,9 +159,9 @@ public class ModelProperty {
 				for(Annotation annot: info.getAnnotations()) {
 					this.annotations.add(annot);
 				}
-				if (Collection.class.isAssignableFrom(this.type)) {
+				/*if (Collection.class.isAssignableFrom(this.type)) {
 					this.isCollection = true;
-				}
+				}*/
 				for (Opposite annot: info.getAnnotationsByType(Opposite.class)) {
 					ModelProperty modelProperty = ModelProperty.find(annot.declaringType(), annot.propertyName());
 					if (modelProperty != null) {
